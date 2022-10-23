@@ -1,5 +1,5 @@
 import type { ErrorDTO } from '../interfaces/common';
-import type { LoginOutputDTO } from '../interfaces/auth';
+import type { LoginOutputDTO, StoreAuth } from '../interfaces/auth';
 
 const BASE_URL = 'http://devserver.jigeumgo.com';
 
@@ -55,4 +55,35 @@ async function postLogin(email: string, password: string): Promise<LoginOutputDT
   }
 }
 
-export { getAuthValid, postLogin };
+async function getStoreInfo(): Promise<StoreAuth | ErrorDTO> {
+  try {
+    const response = await fetch(`${BASE_URL}/store/my-info`, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('token')}`,
+      },
+    });
+    if (response.ok) {
+      return response.json();
+    } else {
+      if (response.status === 404) {
+        return {
+          error: true,
+          message: '항목을 찾을 수 없습니다.',
+        };
+      } else {
+        return {
+          error: true,
+          message: '서버오류로 인해 사용자 정보를 가져오지 못했습니다.',
+        };
+      }
+    }
+  } catch (err) {
+    return {
+      error: true,
+      message: '서버오류로 인해 사용자 정보를 가져오지 못했습니다.',
+    };
+  }
+}
+
+export { getAuthValid, postLogin, getStoreInfo };

@@ -26,6 +26,7 @@ const PopupContainer = styled.div`
     position: absolute;
     top: 130px;
     left: 50%;
+    width: 100%;
     transform: translateX(-50%);
     font: ${thema.font.h4};
   }
@@ -38,13 +39,13 @@ const PopupContainer = styled.div`
     height: 44px;
     border: none;
     border-radius: 4px;
-    background: ${thema.color.alert.red};
+    background: ${thema.color.alert.green};
     font: ${thema.font.pb2};
     color: ${thema.color.primary.main3};
   }
 `;
 
-function popupFail({
+function SuccessPopup({
   title,
   description,
   close,
@@ -63,4 +64,4 @@ function popupFail({
   );
 }
 
-export default popupFail;
+export default SuccessPopup;

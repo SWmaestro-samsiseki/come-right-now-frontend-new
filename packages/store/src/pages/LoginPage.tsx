@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import thema from '../styles/thema';
@@ -6,7 +6,7 @@ import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
 import useAuthStore from '../stores/authStore';
 import { postLogin } from '../apis/authAPI';
-import FailPopup from '../components/popupFail';
+import PopupFail from '../components/PopupFail';
 
 const Container = styled.div`
   display: flex;
@@ -115,7 +115,7 @@ function LoginPage() {
       navigate('/main', { replace: true });
     } else {
       MySwal.fire({
-        html: <FailPopup title="로그인 실패" description={response.message} close={Swal.close} />,
+        html: <PopupFail title="로그인 실패" description={response.message} close={Swal.close} />,
         showConfirmButton: false,
         width: '480px',
         padding: 0,

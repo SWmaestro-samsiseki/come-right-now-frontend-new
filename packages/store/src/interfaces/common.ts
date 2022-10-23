@@ -3,4 +3,9 @@ interface ErrorDTO {
   message: string;
 }
 
-export type { ErrorDTO };
+interface SocketResponseDTO {
+  isSuccess: boolean;
+  message?: string;
+}
+
+export type { ErrorDTO, SocketResponseDTO };
