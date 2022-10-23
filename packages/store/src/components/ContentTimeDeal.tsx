@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import thema from '../styles/thema';
 import useAuthStore from '../stores/authStore';
 import useTimeDealStore from '../stores/timeDealStore';
-import { getTimeDealByStore } from '../apis/timeDealAPI';
+import { getTimeDealList } from '../apis/timeDealAPI';
 import ItemTimeDeal from './ItemTimeDeal';
 
 const TimeDealContainer = styled.div`
@@ -32,7 +32,7 @@ function ConetntTimeDeal() {
   const { timeDealList, initTimeDeal } = useTimeDealStore();
 
   async function fetchTimeDeal(storeId: string) {
-    const response = await getTimeDealByStore(storeId);
+    const response = await getTimeDealList(storeId);
     if (!('error' in response)) {
       initTimeDeal(response);
     } else {

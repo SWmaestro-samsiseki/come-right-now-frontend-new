@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import thema from '../styles/thema';
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
-import { deleteParticipantByStore } from '../apis/timeDealAPI';
+import { deleteParticipant } from '../apis/timeDealAPI';
 import useSocket from '../hooks/useSocket';
 import useTimeDealStore from '../stores/timeDealStore';
 import PopupConfirm from './PopupConfirm';
@@ -71,7 +71,7 @@ function ItemParticipant({
       },
     }).then(async (result) => {
       if (result.isConfirmed) {
-        const response = await deleteParticipantByStore(item.id);
+        const response = await deleteParticipant(item.id);
         if (typeof response === 'boolean') {
           removeParticipant(timeDealId, item.id);
           MySwal.fire({

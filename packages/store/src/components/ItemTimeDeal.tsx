@@ -4,7 +4,7 @@ import thema from '../styles/thema';
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
 import useTimeDealStore from '../stores/timeDealStore';
-import { closeTimeDealByStore } from '../apis/timeDealAPI';
+import { patchCloseTimeDeal } from '../apis/timeDealAPI';
 import PopupConfirm from './PopupConfirm';
 import PopupSuccess from './PopupSuccess';
 import PopupFail from './PopupFail';
@@ -107,7 +107,7 @@ function ItemTimeDeal({ item }: { item: TimeDealStoreDTO }) {
       },
     }).then(async ({ isConfirmed }) => {
       if (isConfirmed) {
-        const response = await closeTimeDealByStore(item.id);
+        const response = await patchCloseTimeDeal(item.id);
         if (typeof response === 'boolean') {
           MySwal.fire({
             html: (
@@ -152,7 +152,7 @@ function ItemTimeDeal({ item }: { item: TimeDealStoreDTO }) {
   }
 
   async function doneTimeDeal() {
-    const response = await closeTimeDealByStore(item.id);
+    const response = await patchCloseTimeDeal(item.id);
     if (typeof response === 'boolean') {
       setIsDone(true);
       if (item.participants.length === 0) {

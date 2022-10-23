@@ -7,6 +7,7 @@ interface StandStore {
   addStand: (value: ReservationDTO) => void;
   removeStand: (value: ReservationDTO) => void;
   reservationList: ReservationDTO[];
+  initReservationList: (value: ReservationDTO[]) => void;
   addReservation: (value: ReservationDTO) => void;
   removeReservation: (value: ReservationDTO | number) => void;
   updateReservation: (id: number, time: Date) => void;
@@ -19,6 +20,7 @@ const useReservationStore = create<StandStore>((set) => ({
   removeStand: (value: ReservationDTO) =>
     set((state) => ({ standList: [...state.standList.filter((ele) => ele !== value)] })),
   reservationList: [],
+  initReservationList: (value: ReservationDTO[]) => set(() => ({ reservationList: value })),
   addReservation: (value: ReservationDTO) =>
     set((state) => ({ reservationList: [...state.reservationList, value] })),
   removeReservation: (value: ReservationDTO | number) => {

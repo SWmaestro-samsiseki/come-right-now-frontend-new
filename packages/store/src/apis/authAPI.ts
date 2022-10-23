@@ -1,5 +1,5 @@
 import type { ErrorDTO } from '../interfaces/common';
-import type { LoginOutputDTO, StoreAuth } from '../interfaces/auth';
+import type { StoreAuth } from '../interfaces/auth';
 
 const BASE_URL = 'http://devserver.jigeumgo.com';
 
@@ -26,7 +26,7 @@ async function getAuthValid(): Promise<boolean> {
   }
 }
 
-async function postLogin(email: string, password: string): Promise<LoginOutputDTO | ErrorDTO> {
+async function postLogin(email: string, password: string): Promise<string | ErrorDTO> {
   try {
     const response = await fetch(`${BASE_URL}/account/login`, {
       method: 'POST',
@@ -55,6 +55,7 @@ async function postLogin(email: string, password: string): Promise<LoginOutputDT
   }
 }
 
+// TODO: 지윤이한테 물어보고 수정
 async function getStoreInfo(): Promise<StoreAuth | ErrorDTO> {
   try {
     const response = await fetch(`${BASE_URL}/store/my-info`, {

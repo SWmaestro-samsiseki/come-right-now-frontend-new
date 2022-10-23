@@ -1,9 +1,3 @@
-interface LoginOutputDTO {
-  isSuccess: boolean;
-  message: string;
-  accessToken: string;
-  userType: string;
-}
 interface UserAuth {
   id: string;
   email: string;
@@ -42,4 +36,4 @@ interface StoreAuth {
   };
 }
 
-export type { LoginOutputDTO, UserAuth, StoreAuth };
+export type { UserAuth, StoreAuth };

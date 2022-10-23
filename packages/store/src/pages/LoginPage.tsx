@@ -95,11 +95,11 @@ const Tooltip = styled.div`
 `;
 
 function LoginPage() {
+  const [email, setEmail] = useState('');
+  const [pw, setPw] = useState('');
   const navigate = useNavigate();
   const MySwal = withReactContent(Swal);
   const { setAuthorized } = useAuthStore();
-  const [email, setEmail] = useState('');
-  const [pw, setPw] = useState('');
 
   function changeId(e: React.ChangeEvent<HTMLInputElement>) {
     setEmail(e.target.value);
@@ -109,8 +109,10 @@ function LoginPage() {
   }
   async function login() {
     const response = await postLogin(email, pw);
-    if (!('error' in response)) {
-      localStorage.setItem('token', response.accessToken);
+    console.log(response);
+
+    if (typeof response === 'string') {
+      localStorage.setItem('token', response);
       setAuthorized();
       navigate('/main', { replace: true });
     } else {

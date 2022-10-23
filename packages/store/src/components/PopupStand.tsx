@@ -16,7 +16,7 @@ const PopupContainer = styled.div`
   flex-direction: column;
   width: 100%;
   height: 300px;
-  border-radius: 8px;
+  border-radius: 12px;
 
   &::after {
     content: '';
@@ -25,8 +25,8 @@ const PopupContainer = styled.div`
     width: 100%;
     height: 16px;
     background: ${thema.color.primary.main1_active};
-    border-top-left-radius: 8px;
-    border-top-right-radius: 8px;
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
   }
 `;
 const Title = styled.h1`
