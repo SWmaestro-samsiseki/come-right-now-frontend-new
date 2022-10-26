@@ -3,7 +3,7 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 import styled from 'styled-components';
 import useAuthStore from './stores/authStore';
 import { getAuthValid } from './apis/authAPI';
-// import LoginPage from './pages/LoginPage';
+import LoginPage from './pages/LoginPage';
 // import MainPage from './pages/MainPage';
 
 const Container = styled.div`
@@ -41,7 +41,10 @@ function App() {
             )
           }
         />
-        <Route path="/login" element={authorized ? <Navigate to="/main" replace={true} /> : null} />
+        <Route
+          path="/login"
+          element={authorized ? <Navigate to="/main" replace={true} /> : <LoginPage />}
+        />
         <Route path="/main" element={authorized ? null : <Navigate to="/login" replace={true} />} />
       </Routes>
     </Container>
