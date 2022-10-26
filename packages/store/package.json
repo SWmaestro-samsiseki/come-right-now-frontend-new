@@ -1,5 +1,5 @@
 {
-  "name": "store",
+  "name": "@packages/store",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
