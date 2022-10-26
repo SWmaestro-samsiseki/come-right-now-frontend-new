@@ -109,10 +109,9 @@ function LoginPage() {
   }
   async function login() {
     const response = await postLogin(email, pw);
-    console.log(response);
 
-    if (typeof response === 'string') {
-      localStorage.setItem('token', response);
+    if (!('error' in response)) {
+      localStorage.setItem('token', response.token);
       setAuthorized();
       navigate('/main', { replace: true });
     } else {

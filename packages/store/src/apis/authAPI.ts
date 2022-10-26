@@ -26,7 +26,7 @@ async function getAuthValid(): Promise<boolean> {
   }
 }
 
-async function postLogin(email: string, password: string): Promise<string | ErrorDTO> {
+async function postLogin(email: string, password: string): Promise<{ token: string } | ErrorDTO> {
   try {
     const response = await fetch(`${BASE_URL}/account/login`, {
       method: 'POST',
