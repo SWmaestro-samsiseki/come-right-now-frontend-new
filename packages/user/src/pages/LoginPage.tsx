@@ -18,54 +18,58 @@ const Container = styled.div`
 `;
 const Logo = styled.img`
   width: 160px;
-  margin: 30px 0 40px;
+  margin: 0 0 60px;
 `;
 const InputBox = styled.div`
   position: relative;
   width: 320px;
   height: 24px;
-  margin: 0 auto;
-  margin-bottom: 20px;
+  margin: 0 0 32px;
 
   & input {
     display: block;
-    width: 100%;
+    width: 80%;
     height: 100%;
+    padding: 0 15% 0 5%;
     border: none;
-    border-bottom: 1px solid ${thema.color.secondary.main4};
+    border-bottom: 1.3px solid ${thema.color.secondary.main4};
     font: ${thema.font.p2};
     caret-color: ${thema.color.primary.main1};
+
     &:focus {
-      border-bottom: 1px solid ${thema.color.primary.main1};
+      border-bottom: 1.3px solid ${thema.color.primary.main1};
       outline: none;
     }
     &::placeholder {
-      color: ${thema.color.secondary.main4};
+      color: ${thema.color.secondary.main3};
     }
   }
-
   & div {
     position: absolute;
-    top: 50%;
+    top: 0;
     right: 0;
-    transform: translateY(-50%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 15%;
+    height: 100%;
+    color: ${thema.color.secondary.main3};
   }
 `;
 const LoginBtn = styled.button`
   display: flex;
-  flex-direction: column;
   justify-content: center;
   align-items: center;
   width: 320px;
   height: 48px;
-  margin-top: 40%;
-  margin-bottom: 30px;
+  margin: 148px 0 16px;
   border: none;
   border-radius: 4px;
   font: ${thema.font.pb2};
-  color: ${thema.color.primary.main3};
+  color: ${(props) => (props.disabled ? thema.color.primary.main3 : thema.color.primary.main2)};
   background: ${(props) =>
     props.disabled ? thema.color.secondary.main3_active : thema.color.primary.main1};
+
   &:active {
     background: ${(props) =>
       props.disabled ? thema.color.secondary.main3_active : thema.color.primary.main1_active};
