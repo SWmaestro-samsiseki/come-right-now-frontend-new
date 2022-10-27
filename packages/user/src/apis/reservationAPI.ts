@@ -1,7 +1,55 @@
 import type { ErrorDTO } from '../interfaces/common';
-import type { HistoryUserDTO } from '../interfaces/reservation';
+import type { ReservationDTO, HistoryUserDTO } from '../interfaces/reservation';
 
 const BASE_URL = 'http://devserver.jigeumgo.com';
+
+async function getReservation(id: string): Promise<ReservationDTO[] | ErrorDTO> {
+  try {
+    const response = await fetch(`${BASE_URL}/reservation/user/${id}?status=reserved`, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('token')}`,
+      },
+    });
+    if (response.ok) {
+      return await response.json();
+    } else {
+      return {
+        error: true,
+        message: '예약내역이 없습니다.',
+      };
+    }
+  } catch (err) {
+    return {
+      error: true,
+      message: '서버오류로 인해 예약내역을 가져오지 못했습니다.',
+    };
+  }
+}
+
+async function deleteReservation(id: number): Promise<boolean | ErrorDTO> {
+  try {
+    const response = await fetch(`${BASE_URL}/reservation/${id}`, {
+      method: 'DELETE',
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('token')}`,
+      },
+    });
+    if (response.ok) {
+      return true;
+    } else {
+      return {
+        error: true,
+        message: '예약내역이 없습니다.',
+      };
+    }
+  } catch (err) {
+    return {
+      error: true,
+      message: '서버오류로 인해 예약취소에 실패했습니다.',
+    };
+  }
+}
 
 async function getReservationHistory(id: string): Promise<HistoryUserDTO[][] | ErrorDTO> {
   try {
@@ -22,4 +70,18 @@ async function getReservationHistory(id: string): Promise<HistoryUserDTO[][] | E
   }
 }
 
-export { getReservationHistory };
+async function getDistance(id: string, latitude: number, longitude: number) {
+  const response = await fetch(
+    `${BASE_URL}/store/${id}/distance?latitude=${latitude}&longitude=${longitude}`,
+    {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('token')}`,
+      },
+    },
+  );
+  const parse = await response.json();
+  return parse;
+}
+
+export { getReservation, deleteReservation, getReservationHistory, getDistance };

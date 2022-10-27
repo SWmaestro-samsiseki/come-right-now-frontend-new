@@ -4,9 +4,9 @@ import styled from 'styled-components';
 import thema from '../styles/thema';
 import useReservationStore from '../stores/reservationStore';
 import HomeHeader from '../components/HomeHeader';
-// import ReservationContainer from '../../components/user/ReservationContainer';
-// import TimeDealContainer from '../../components/user/TimeDealContainer';
-// import CurrentTimeDealContainer from '../../components/user/CurrentTimeDealContainer';
+import ReservationContainer from './ReservationContainer';
+import CurrentTimeDealContainer from './CurrentTimeDealContainer';
+import TimeDealContainer from './TimeDealContainer';
 
 const MainContainer = styled.div`
   position: relative;
@@ -69,11 +69,11 @@ function SectionHome() {
     <MainContainer>
       <HomeHeader />
       <Contents>
-        {/* <ReservationContainer /> */}
+        <ReservationContainer />
         <TermDivBox h={20} />
-        {/* <CurrentTimeDealContainer /> */}
+        <CurrentTimeDealContainer />
         <TermDivBox h={20} />
-        {/* <TimeDealContainer /> */}
+        <TimeDealContainer />
       </Contents>
       <RequestBtn onClick={next} disabled={isReservation}>
         + 실시간 예약

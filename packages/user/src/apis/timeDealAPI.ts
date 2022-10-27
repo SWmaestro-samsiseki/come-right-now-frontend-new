@@ -120,4 +120,40 @@ async function getCurrenTimeDealByUser(
   }
 }
 
-export { getTimeDealList, requestTimeDealByUser, getCurrenTimeDealByUser };
+async function deleteParticipantByStore(participantId: number): Promise<boolean | ErrorDTO> {
+  try {
+    const response = await fetch(`${BASE_URL}/participant/${participantId}`, {
+      method: 'DELETE',
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('token')}`,
+      },
+    });
+    if (response.ok) {
+      return true;
+    } else {
+      if (response.status === 404) {
+        return {
+          error: true,
+          message: '내역이 없습니다.',
+        };
+      } else {
+        return {
+          error: true,
+          message: '서버오류로 인해 체크아웃을 처리하지 못했습니다.',
+        };
+      }
+    }
+  } catch (err) {
+    return {
+      error: true,
+      message: '서버오류로 인해 체크아웃을 처리하지 못했습니다.',
+    };
+  }
+}
+
+export {
+  getTimeDealList,
+  requestTimeDealByUser,
+  getCurrenTimeDealByUser,
+  deleteParticipantByStore,
+};
