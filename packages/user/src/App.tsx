@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import useAuthStore from './stores/authStore';
 import { getAuthValid } from './apis/authAPI';
 import LoginPage from './pages/LoginPage';
-// import MainPage from './pages/MainPage';
+import MainPage from './pages/MainPage';
 
 const Container = styled.div`
   width: 100vw;
@@ -45,7 +45,10 @@ function App() {
           path="/login"
           element={authorized ? <Navigate to="/main" replace={true} /> : <LoginPage />}
         />
-        <Route path="/main" element={authorized ? null : <Navigate to="/login" replace={true} />} />
+        <Route
+          path="/main/*"
+          element={authorized ? <MainPage /> : <Navigate to="/login" replace={true} />}
+        />
       </Routes>
     </Container>
   );

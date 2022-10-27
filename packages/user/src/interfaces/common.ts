@@ -8,4 +8,10 @@ interface SocketResponseDTO {
   message?: string;
 }
 
-export type { ErrorDTO, SocketResponseDTO };
+interface Category {
+  id: number;
+  name: string;
+  image: string;
+}
+
+export type { ErrorDTO, SocketResponseDTO, Category };
