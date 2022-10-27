@@ -5,6 +5,7 @@ import useAuthStore from './stores/authStore';
 import { getAuthValid } from './apis/authAPI';
 import LoginPage from './pages/LoginPage';
 import MainPage from './pages/MainPage';
+import RequestPage from './pages/RequestPage';
 
 const Container = styled.div`
   width: 100vw;
@@ -48,6 +49,10 @@ function App() {
         <Route
           path="/main/*"
           element={authorized ? <MainPage /> : <Navigate to="/login" replace={true} />}
+        />
+        <Route
+          path="/request"
+          element={authorized ? <RequestPage /> : <Navigate to="/login" replace={true} />}
         />
       </Routes>
     </Container>

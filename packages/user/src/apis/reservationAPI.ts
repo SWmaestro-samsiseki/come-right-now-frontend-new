@@ -1,7 +1,18 @@
-import type { ErrorDTO } from '../interfaces/common';
+import type { ErrorDTO, Category } from '../interfaces/common';
 import type { ReservationDTO, HistoryUserDTO } from '../interfaces/reservation';
 
 const BASE_URL = 'http://devserver.jigeumgo.com';
+
+async function fetchCategories(): Promise<Array<Category>> {
+  const response = await fetch(`${BASE_URL}/category`, {
+    method: 'GET',
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem('token')}`,
+    },
+  });
+  const parse = await response.json();
+  return parse;
+}
 
 async function getReservation(id: string): Promise<ReservationDTO[] | ErrorDTO> {
   try {
@@ -84,4 +95,4 @@ async function getDistance(id: string, latitude: number, longitude: number) {
   return parse;
 }
 
-export { getReservation, deleteReservation, getReservationHistory, getDistance };
+export { fetchCategories, getReservation, deleteReservation, getReservationHistory, getDistance };
