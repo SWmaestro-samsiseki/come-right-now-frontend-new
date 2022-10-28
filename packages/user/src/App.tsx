@@ -6,6 +6,7 @@ import { getAuthValid } from './apis/authAPI';
 import LoginPage from './pages/LoginPage';
 import MainPage from './pages/MainPage';
 import RequestPage from './pages/RequestPage';
+import SearchPage from './pages/SearchPage';
 
 const Container = styled.div`
   width: 100vw;
@@ -53,6 +54,10 @@ function App() {
         <Route
           path="/request"
           element={authorized ? <RequestPage /> : <Navigate to="/login" replace={true} />}
+        />
+        <Route
+          path="/search"
+          element={authorized ? <SearchPage /> : <Navigate to="/login" replace={true} />}
         />
       </Routes>
     </Container>

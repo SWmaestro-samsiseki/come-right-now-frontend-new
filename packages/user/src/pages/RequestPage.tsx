@@ -127,8 +127,6 @@ function RequestPage() {
   useEffect(() => {
     fetchCategories().then((res) => {
       console.log('주종 카테고리를 가져오는데 성공했습니다.');
-      console.log(res);
-
       initCategories(res);
     });
   }, []);
