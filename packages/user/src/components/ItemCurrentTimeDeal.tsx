@@ -99,7 +99,7 @@ function ItemCurrentTimeDeal({ item }: { item: CurrentTimeDealUserDTO }) {
       width: '370px',
       padding: 0,
       customClass: {
-        popup: 'border-radius-0',
+        popup: 'popup-border-radius',
       },
     });
   }
@@ -125,7 +125,7 @@ function ItemCurrentTimeDeal({ item }: { item: CurrentTimeDealUserDTO }) {
       width: '280px',
       padding: 0,
       customClass: {
-        popup: 'fail-popup-border',
+        popup: 'popup-border-radius',
       },
     }).then(async ({ isConfirmed }) => {
       if (isConfirmed) {
@@ -152,7 +152,7 @@ function ItemCurrentTimeDeal({ item }: { item: CurrentTimeDealUserDTO }) {
                   width: '280px',
                   padding: 0,
                   customClass: {
-                    popup: 'fail-popup-border',
+                    popup: 'popup-border-radius',
                   },
                   timer: 2000,
                 });
@@ -169,7 +169,7 @@ function ItemCurrentTimeDeal({ item }: { item: CurrentTimeDealUserDTO }) {
                   width: '280px',
                   padding: 0,
                   customClass: {
-                    popup: 'fail-popup-border',
+                    popup: 'popup-border-radius',
                   },
                   timer: 2000,
                 });
@@ -187,7 +187,7 @@ function ItemCurrentTimeDeal({ item }: { item: CurrentTimeDealUserDTO }) {
                 width: '280px',
                 padding: 0,
                 customClass: {
-                  popup: 'fail-popup-border',
+                  popup: 'popup-border-radius',
                 },
                 timer: 2000,
               });

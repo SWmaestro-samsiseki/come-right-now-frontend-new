@@ -1,3 +1,10 @@
+interface MiniTimeDealDTO {
+  benefit: string;
+  endTime: Date;
+  id: number;
+  status: string;
+}
+
 interface MiniUserDTO {
   birthDate: string;
   creditRate: number;
@@ -14,4 +21,11 @@ interface TimeDealStoreDTO {
   participants?: { id: number; status: string; user: MiniUserDTO }[];
 }
 
-export type { MiniUserDTO, TimeDealStoreDTO };
+interface CheckInUserDTO {
+  id: number;
+  status: string;
+  timeDeal: MiniTimeDealDTO;
+  user: MiniUserDTO;
+}
+
+export type { MiniUserDTO, TimeDealStoreDTO, CheckInUserDTO };

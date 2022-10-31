@@ -33,12 +33,12 @@ const BtnContainer = styled.div`
   }
   & button:nth-child(1) {
     width: 40%;
-    border-bottom-left-radius: 12px;
+    border-bottom-left-radius: 8px;
     background: ${thema.color.secondary.main3};
   }
   & button:nth-child(2) {
     width: 60%;
-    border-bottom-right-radius: 12px;
+    border-bottom-right-radius: 8px;
     background: ${thema.color.primary.main1};
   }
 `;

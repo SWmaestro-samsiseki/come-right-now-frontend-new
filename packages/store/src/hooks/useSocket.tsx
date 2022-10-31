@@ -2,7 +2,9 @@ import { io, Socket } from 'socket.io-client';
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
 import useReservationStore from '../stores/reservationStore';
+import useTimeDealStore from '../stores/timeDealStore';
 import { getReservationInfo } from '../apis/reservationAPI';
+import { getParcitipantInfoByStore } from '../apis/timeDealAPI';
 import PopupStand from '../components/PopupStand';
 import PopupFail from '../components/PopupFail';
 
@@ -14,9 +16,9 @@ interface SocketHooks {
 }
 
 const useSocket = (token: string): SocketHooks => {
-  // const navigate = useNavigate();
   const MySwal = withReactContent(Swal);
   const { addStand, removeReservation, updateReservation } = useReservationStore();
+  const { addParticipant } = useTimeDealStore();
 
   if (!socket[token]) {
     socket[token] = io(BASE_URL, {
@@ -65,6 +67,15 @@ const useSocket = (token: string): SocketHooks => {
         console.log('사용자로부터 해당 예약건이 지연되었습니다.');
       },
     );
+
+    socket[token].on('server.check-in-time-deal.store', async (participantId: number) => {
+      const response = await getParcitipantInfoByStore(participantId);
+      if (!('error' in response)) {
+        addParticipant(response.timeDeal.id, response.id, response.user);
+      } else {
+        console.log(response.message);
+      }
+    });
   }
 
   return { socket: socket[token] };

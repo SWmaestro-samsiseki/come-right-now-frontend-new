@@ -67,7 +67,7 @@ function ItemParticipant({
       width: '480px',
       padding: 0,
       customClass: {
-        popup: 'fail-popup-border',
+        popup: 'popup-border-radius',
       },
     }).then(async (result) => {
       if (result.isConfirmed) {
@@ -86,7 +86,7 @@ function ItemParticipant({
             width: '480px',
             padding: 0,
             customClass: {
-              popup: 'fail-popup-border',
+              popup: 'popup-border-radius',
             },
             timer: 2000,
           });
@@ -99,7 +99,7 @@ function ItemParticipant({
             width: '480px',
             padding: 0,
             customClass: {
-              popup: 'fail-popup-border',
+              popup: 'popup-border-radius',
             },
             timer: 2000,
           });

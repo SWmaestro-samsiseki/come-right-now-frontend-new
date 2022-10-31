@@ -1,4 +1,4 @@
-import type { TimeDealStoreDTO } from '../interfaces/timeDeal';
+import type { TimeDealStoreDTO, CheckInUserDTO } from '../interfaces/timeDeal';
 import type { ErrorDTO } from '../interfaces/common';
 
 const BASE_URL = 'http://devserver.jigeumgo.com';
@@ -99,6 +99,40 @@ async function patchCloseTimeDeal(timeDealId: number): Promise<boolean | ErrorDT
   }
 }
 
+async function getParcitipantInfoByStore(
+  participantId: number,
+): Promise<CheckInUserDTO | ErrorDTO> {
+  try {
+    const response = await fetch(`${BASE_URL}/participant/${participantId}`, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('token')}`,
+      },
+    });
+    if (response.ok) {
+      const jsonResponse = await response.json();
+      return jsonResponse;
+    } else {
+      if (response.status === 404) {
+        return {
+          error: true,
+          message: '체크인 내역이 없습니다.',
+        };
+      } else {
+        return {
+          error: true,
+          message: '서버오류로 인해 타임딜목록을 받아오지 못했습니다.',
+        };
+      }
+    }
+  } catch (err) {
+    return {
+      error: true,
+      message: '서버오류로 인해 사용자 정보를 받아오지 못했습니다.',
+    };
+  }
+}
+
 async function deleteParticipant(participantId: number): Promise<boolean | ErrorDTO> {
   try {
     const response = await fetch(`${BASE_URL}/participant/${participantId}`, {
@@ -130,4 +164,10 @@ async function deleteParticipant(participantId: number): Promise<boolean | Error
   }
 }
 
-export { postTimeDeal, getTimeDealList, patchCloseTimeDeal, deleteParticipant };
+export {
+  postTimeDeal,
+  getTimeDealList,
+  patchCloseTimeDeal,
+  getParcitipantInfoByStore,
+  deleteParticipant,
+};
