@@ -11,7 +11,7 @@ interface TimeDealStoreDTO {
   status: string;
   endTime: Date;
   benefit: string;
-  participants: { id: number; status: string; user: MiniUserDTO }[];
+  participants?: { id: number; status: string; user: MiniUserDTO }[];
 }
 
 export type { MiniUserDTO, TimeDealStoreDTO };

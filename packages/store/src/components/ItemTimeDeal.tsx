@@ -103,7 +103,7 @@ function ItemTimeDeal({ item }: { item: TimeDealStoreDTO }) {
       width: '480px',
       padding: 0,
       customClass: {
-        popup: 'fail-popup-border',
+        popup: 'popup-border-radius',
       },
     }).then(async ({ isConfirmed }) => {
       if (isConfirmed) {
@@ -121,12 +121,12 @@ function ItemTimeDeal({ item }: { item: TimeDealStoreDTO }) {
             width: '480px',
             padding: 0,
             customClass: {
-              popup: 'fail-popup-border',
+              popup: 'popup-border-radius',
             },
             timer: 2000,
           });
           setIsDone(true);
-          if (item.participants.length === 0) {
+          if (item.participants?.length === 0) {
             removeTimeDeal(item);
           }
         } else {
@@ -142,7 +142,7 @@ function ItemTimeDeal({ item }: { item: TimeDealStoreDTO }) {
             width: '480px',
             padding: 0,
             customClass: {
-              popup: 'fail-popup-border',
+              popup: 'popup-border-radius',
             },
             timer: 2000,
           });
@@ -155,7 +155,7 @@ function ItemTimeDeal({ item }: { item: TimeDealStoreDTO }) {
     const response = await patchCloseTimeDeal(item.id);
     if (typeof response === 'boolean') {
       setIsDone(true);
-      if (item.participants.length === 0) {
+      if (item.participants?.length === 0) {
         removeTimeDeal(item);
       }
     } else {
@@ -164,7 +164,7 @@ function ItemTimeDeal({ item }: { item: TimeDealStoreDTO }) {
   }
 
   useEffect(() => {
-    if (item.status === 'CLOSED' && item.participants.length === 0) {
+    if (item.status === 'CLOSED' && item.participants?.length === 0) {
       closeTimeDeal();
     }
   }, [item.status, item.participants]);
@@ -204,7 +204,7 @@ function ItemTimeDeal({ item }: { item: TimeDealStoreDTO }) {
         </CloseBtn>
       </ControlBox>
       <ParticipantBox>
-        {item.participants.map((ele, index) => (
+        {item.participants?.map((ele, index) => (
           <ItemParticipant key={index} item={ele} timeDealId={item.id} />
         ))}
       </ParticipantBox>

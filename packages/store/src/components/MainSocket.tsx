@@ -16,6 +16,8 @@ function MainSocket() {
   const { addReservation } = useReservationStore();
 
   useEffect(() => {
+    console.log(socket);
+
     socket.on('server.make-reservation.store', async (reservationId: number) => {
       const response = await getReservationInfo(reservationId);
       if (!('error' in response)) {
@@ -42,7 +44,7 @@ function MainSocket() {
         });
       }
     });
-  }, []);
+  }, [socket]);
 
   return <></>;
 }

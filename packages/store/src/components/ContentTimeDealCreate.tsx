@@ -183,7 +183,7 @@ function ContentTimeDealCreate() {
       width: '480px',
       padding: 0,
       customClass: {
-        popup: 'fail-popup-border',
+        popup: 'popup-border-radius',
       },
     }).then(async ({ isConfirmed }) => {
       if (isConfirmed) {
@@ -203,7 +203,7 @@ function ContentTimeDealCreate() {
             width: '480px',
             padding: 0,
             customClass: {
-              popup: 'fail-popup-border',
+              popup: 'popup-border-radius',
             },
             timer: 2000,
           });
@@ -220,7 +220,7 @@ function ContentTimeDealCreate() {
             width: '480px',
             padding: 0,
             customClass: {
-              popup: 'fail-popup-border',
+              popup: 'popup-border-radius',
             },
             timer: 2000,
           });

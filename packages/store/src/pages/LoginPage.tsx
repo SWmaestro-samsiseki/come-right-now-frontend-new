@@ -109,6 +109,7 @@ function LoginPage() {
   }
   async function login() {
     const response = await postLogin(email, pw);
+    console.log(response);
 
     if (!('error' in response)) {
       localStorage.setItem('token', response.token);

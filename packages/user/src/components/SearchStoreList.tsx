@@ -10,12 +10,6 @@ const ListContainer = styled.div`
   width: 100%;
   height: 50%;
 `;
-const LoadImg = styled.img`
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-`;
 
 function SearchStoreList() {
   const { responses, resetResponse } = useResponseInfoStore();
