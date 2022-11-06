@@ -108,7 +108,9 @@ function LoginPage() {
     setPw(e.target.value);
   }
   async function login() {
+    window.ReactNativeWebView.postMessage(JSON.stringify({ email, pw }));
     const response = await postLogin(email, pw);
+    window.ReactNativeWebView.postMessage(JSON.stringify(response));
     if (!('error' in response)) {
       localStorage.setItem('token', response.token);
       setAuthorized();
