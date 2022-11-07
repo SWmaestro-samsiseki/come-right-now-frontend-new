@@ -28,7 +28,6 @@ async function getAuthValid(): Promise<boolean> {
 
 async function postLogin(email: string, password: string): Promise<{ token: string } | ErrorDTO> {
   try {
-    window.ReactNativeWebView.postMessage(JSON.stringify({ email, password }));
     const response = await fetch(`${BASE_URL}/account/login`, {
       method: 'POST',
       headers: {
