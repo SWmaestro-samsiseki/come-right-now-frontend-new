@@ -93,7 +93,7 @@ const DetailBox = styled.div`
     background: ${thema.color.secondary.main2};
     border: 1px solid ${thema.color.primary.main2_active};
     border-radius: 2px;
-    font: ${thema.font.pb3};
+    font: ${thema.font.pb4};
     color: ${thema.color.primary.main2_active};
   }
 `;
@@ -120,7 +120,7 @@ const BtnBox = styled.div`
     border: 1px solid ${thema.color.primary.main2_active};
     border-radius: 4px;
     background: ${thema.color.primary.main1};
-    font: ${thema.font.pb3};
+    font: ${thema.font.pb4};
     color: ${thema.color.primary.main2_active};
   }
 `;
