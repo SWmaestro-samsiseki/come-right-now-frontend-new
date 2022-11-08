@@ -22,13 +22,13 @@ const Header = styled.div`
   width: 100%;
   height: 10%;
 
-  & span {
+  & div {
     display: flex;
     align-items: center;
     margin-left: 15px;
   }
-  & img {
-    width: 30px;
+  & i {
+    margin-right: 5px;
   }
 `;
 const Contents = styled.div`
@@ -107,7 +107,7 @@ const Controller = styled.div`
     margin: 4px;
     border: none;
     border-radius: 4px;
-    font: ${thema.font.h3};
+    font: ${thema.font.h4};
     background: ${thema.color.secondary.main3};
     color: ${thema.color.primary.main3};
   }
@@ -124,6 +124,7 @@ const BenefitBox = styled.div`
     margin-bottom: 15px;
   }
   & textarea {
+    width: calc(95% - 60px);
     padding: 10px;
     border: 1px solid ${thema.color.primary.main2};
     border-radius: 8px;
@@ -135,8 +136,8 @@ const BenefitBox = styled.div`
 `;
 const CreateBtn = styled.button`
   position: absolute;
-  bottom: 40px;
-  right: 50px;
+  bottom: 20px;
+  right: 55px;
   width: 120px;
   height: 40px;
   border: none;
@@ -160,15 +161,12 @@ function ContentTimeDealCreate() {
   function goBack() {
     navigate('/main/timedeal', { replace: true });
   }
-
   function minusTime() {
     if (time > 5) setTime(time - 5);
   }
-
   function plusTime() {
     if (time < 60) setTime(time + 5);
   }
-
   function createTimeDeal() {
     MySwal.fire({
       html: (
@@ -232,10 +230,10 @@ function ContentTimeDealCreate() {
   return (
     <TimeDealCreateContainer>
       <Header>
-        <span>
+        <div>
           <i className="fas fa-chevron-left" onClick={goBack}></i>
           뒤로
-        </span>
+        </div>
       </Header>
       <Contents>
         <Content>타임딜에 대한 설명</Content>
@@ -258,7 +256,6 @@ function ContentTimeDealCreate() {
           <BenefitBox>
             <p>혜택 및 조건</p>
             <textarea
-              cols={35}
               rows={4}
               value={benefit}
               onChange={(e) => {

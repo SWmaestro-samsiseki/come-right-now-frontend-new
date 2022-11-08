@@ -24,6 +24,7 @@ const CreateTimeDealBtn = styled.button`
   border: none;
   font: ${thema.font.p1};
   text-decoration: underline;
+  color: ${thema.color.primary.main2};
 `;
 
 function ConetntTimeDeal() {
