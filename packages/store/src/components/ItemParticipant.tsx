@@ -3,7 +3,6 @@ import thema from '../styles/thema';
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
 import { deleteParticipant } from '../apis/timeDealAPI';
-import useSocket from '../hooks/useSocket';
 import useTimeDealStore from '../stores/timeDealStore';
 import PopupConfirm from './PopupConfirm';
 import PopupSuccess from './PopupSuccess';
@@ -36,7 +35,7 @@ const BtnBox = styled.div`
     border: none;
     border-radius: 4px;
     background: ${thema.color.primary.main1};
-    font: ${thema.font.pb1};
+    font: ${thema.font.pb2};
     color: ${thema.color.primary.main2_active};
   }
 `;
@@ -50,8 +49,6 @@ function ItemParticipant({
 }) {
   const { removeParticipant } = useTimeDealStore();
   const MySwal = withReactContent(Swal);
-  const token = localStorage.getItem('token') as string;
-  const { socket } = useSocket(token);
 
   async function checkOut() {
     MySwal.fire({

@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import styled from 'styled-components';
+import thema from '../styles/thema';
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
-import PopupFail from '../components/PopupFail';
 import useAuthStore from '../stores/authStore';
 import { postLogin } from '../apis/authAPI';
-import thema from '../styles/thema';
+import PopupFail from '../components/PopupFail';
 
 const Container = styled.div`
   display: flex;

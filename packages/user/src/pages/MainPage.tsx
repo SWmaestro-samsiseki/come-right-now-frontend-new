@@ -19,7 +19,6 @@ function MainPage() {
       (position) => {
         setLatitude(position.coords.latitude);
         setLongitude(position.coords.longitude);
-        console.log('위치를 가져오는데 성공했습니다.');
       },
       () => {
         console.log('위치를 가져오는데 실패했습니다.');

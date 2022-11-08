@@ -21,12 +21,10 @@ const useSocket = (token: string): SocketHooks => {
 
     socket[token].on('server.cancel-reservation.user', () => {
       removeReservation();
-      console.log('가게로부터 해당 예약건이 취소되었습니다.');
     });
 
     socket[token].on('server.check-in.user', () => {
       removeReservation();
-      console.log('가게로부터 해당 예약건이 CheckIn되었습니다.');
     });
   }
 

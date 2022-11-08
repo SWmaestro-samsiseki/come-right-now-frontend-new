@@ -1,12 +1,13 @@
 import { Link, useParams } from 'react-router-dom';
 import styled from 'styled-components';
+import thema from '../styles/thema';
 
 const Container = styled.nav`
   position: absolute;
   bottom: 0;
   width: 100%;
   height: 8%;
-  border-top: 1px solid #ddd;
+  border-top: 1px solid ${thema.color.secondary.main3};
 `;
 const Menu = styled.ul`
   display: flex;
@@ -23,8 +24,8 @@ const MenuItem = styled(Link)`
     display: flex;
     flex-direction: column;
     align-items: center;
-    font: normal 500 12px / 16px 'IBM Plex Sans KR';
-    color: #282828;
+    font: ${thema.font.p3};
+    color: ${thema.color.primary.main2};
   }
   & li span {
     margin-top: 5px;
