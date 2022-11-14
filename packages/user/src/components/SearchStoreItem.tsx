@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
-import useMap from '../stores/mapStore';
 import useSocket from '../hooks/useSocket';
 import useReservationStore from '../stores/reservationStore';
 import useRequestInfoStore from '../stores/requestInfoStore';
@@ -140,8 +139,7 @@ const DetailContainer = styled.div`
   }
 `;
 
-function SearchStoreItem({ item }: { item: ReservationDTO }) {
-  const { map } = useMap();
+function SearchStoreItem({ item, map }: { item: ReservationDTO; map: naver.maps.Map | null }) {
   const { latitude, longitude, initPT } = useRequestInfoStore();
   const [limitTime] = useState(new Date().getTime() + 180000);
   const [time, setTime] = useState('03:00');
@@ -275,7 +273,9 @@ function SearchStoreItem({ item }: { item: ReservationDTO }) {
       new naver.maps.Marker({
         position: new naver.maps.LatLng(item.store.latitude, item.store.longitude),
         map: map,
-        animation: 2,
+        icon: {
+          url: require('../images/location_cur.png'),
+        },
       });
     }
   }, []);

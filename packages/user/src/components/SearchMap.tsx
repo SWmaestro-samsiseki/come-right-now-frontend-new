@@ -7,7 +7,6 @@ import useSocket from '../hooks/useSocket';
 import useResponseInfoStore from '../stores/responseInfoStore';
 import { getReservationInfo } from '../apis/reservationAPI';
 import useRequestInfoStore from '../stores/requestInfoStore';
-import useMap from '../stores/mapStore';
 import thema from '../styles/thema';
 import PopupConfirm from '../components/PopupConfirm';
 import PopupFail from './PopupFail';
@@ -63,15 +62,39 @@ const MoreBtn = styled.button`
   background: rgba(21, 147, 253, 0.72);
 `;
 
-function SearchMap() {
-  const token = localStorage.getItem('token') as string;
-  const { socket } = useSocket(token);
+function SearchMap({
+  mapSetter,
+}: {
+  mapSetter: React.Dispatch<React.SetStateAction<naver.maps.Map | null>>;
+}) {
+  const { socket } = useSocket(localStorage.getItem('token') as string);
   const { addResponse } = useResponseInfoStore();
   const { selectedCategories, people, time, latitude, longitude } = useRequestInfoStore();
-  const { setMap } = useMap();
   const [isSearch, setIsSearch] = useState(true);
   const navigate = useNavigate();
   const MySwal = withReactContent(Swal);
+
+  const initMap = (latitude: number, longitude: number) => {
+    const map = new naver.maps.Map('map', {
+      center: new naver.maps.LatLng(latitude, longitude),
+      zoom: 15,
+    });
+    map.setOptions({
+      scaleControl: false,
+      logoControl: false,
+      mapDataControl: false,
+      zoomControl: false,
+      mapTypeControl: false,
+    });
+    new naver.maps.Marker({
+      position: new naver.maps.LatLng(latitude, longitude),
+      map: map,
+      icon: {
+        url: require('../images/location_cur.png'),
+      },
+    });
+    mapSetter(map);
+  };
 
   function moreSearch() {
     MySwal.fire({
@@ -159,30 +182,10 @@ function SearchMap() {
   }, [socket]);
 
   useEffect(() => {
-    const initMap = () => {
-      if (latitude && longitude) {
-        const map = new naver.maps.Map('map', {
-          center: new naver.maps.LatLng(latitude, longitude),
-          zoom: 15,
-        });
-        setMap(map);
-        map.setOptions({
-          scaleControl: false,
-          logoControl: false,
-          mapDataControl: false,
-          zoomControl: false,
-          mapTypeControl: false,
-        });
-        new naver.maps.Marker({
-          position: new naver.maps.LatLng(latitude, longitude),
-          map: map,
-          icon: {
-            url: require('../images/location_cur.png'),
-          },
-        });
-      }
-    };
-    initMap();
+    const m = document.getElementById('map');
+    if (latitude && longitude && m) {
+      initMap(latitude, longitude);
+    }
   }, [latitude, longitude]);
 
   return (

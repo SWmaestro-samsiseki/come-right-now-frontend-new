@@ -11,7 +11,7 @@ const ListContainer = styled.div`
   height: 50%;
 `;
 
-function SearchStoreList() {
+function SearchStoreList({ map }: { map: naver.maps.Map | null }) {
   const { responses, resetResponse } = useResponseInfoStore();
 
   useEffect(() => {
@@ -22,7 +22,7 @@ function SearchStoreList() {
   return (
     <ListContainer>
       {responses.map((item, index) => (
-        <SearchStoreItem key={index} item={item} />
+        <SearchStoreItem key={index} item={item} map={map} />
       ))}
     </ListContainer>
   );

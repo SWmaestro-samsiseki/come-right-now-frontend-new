@@ -1,4 +1,4 @@
-import React from 'react';
+import { useState } from 'react';
 import styled from 'styled-components';
 import SearchMap from '../components/SearchMap';
 import SearchStoreList from '../components/SearchStoreList';
@@ -9,10 +9,12 @@ const Container = styled.div`
 `;
 
 function SearchPage() {
+  const [map, setMap] = useState<naver.maps.Map | null>(null);
+
   return (
     <Container>
-      <SearchMap />
-      <SearchStoreList />
+      <SearchMap mapSetter={setMap} />
+      <SearchStoreList map={map} />
     </Container>
   );
 }

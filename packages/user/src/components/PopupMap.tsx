@@ -1,6 +1,5 @@
 import { useEffect } from 'react';
 import styled from 'styled-components';
-import useMap from '../stores/mapStore';
 import useRequestInfoStore from '../stores/requestInfoStore';
 
 const Container = styled.div`
@@ -15,7 +14,7 @@ const Map = styled.div`
 
 function MapPopup({ location }: { location: { la: number; lo: number } }) {
   const { latitude, longitude } = useRequestInfoStore();
-  const { setMap } = useMap();
+  // const { setMap } = useMap();
 
   useEffect(() => {
     const initMap = () => {
@@ -24,7 +23,6 @@ function MapPopup({ location }: { location: { la: number; lo: number } }) {
           center: new naver.maps.LatLng(latitude, longitude),
           zoom: 15,
         });
-        setMap(map);
         map.setOptions({
           scaleControl: false,
           logoControl: false,
@@ -42,7 +40,9 @@ function MapPopup({ location }: { location: { la: number; lo: number } }) {
         new naver.maps.Marker({
           position: new naver.maps.LatLng(location.la, location.lo),
           map: map,
-          animation: 2,
+          icon: {
+            url: require('../images/location_cur.png'),
+          },
         });
       }
     };

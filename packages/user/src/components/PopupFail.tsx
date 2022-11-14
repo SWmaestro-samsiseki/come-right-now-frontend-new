@@ -25,8 +25,8 @@ const Btn = styled.button`
   width: 100%;
   height: 40px;
   border: none;
-  border-bottom-left-radius: 12px;
-  border-bottom-right-radius: 12px;
+  border-bottom-left-radius: 8px;
+  border-bottom-right-radius: 8px;
   background: ${thema.color.alert.red};
   font: ${thema.font.pb2};
   color: ${thema.color.primary.main3};

@@ -2,7 +2,9 @@ import React, { useEffect } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import styled from 'styled-components';
 import useAuthStore from './stores/authStore';
+import useRequestInfoStore from './stores/requestInfoStore';
 import { getAuthValid } from './apis/authAPI';
+import { messageToNative } from './utils/react-native';
 import LoginPage from './pages/LoginPage';
 import MainPage from './pages/MainPage';
 import RequestPage from './pages/RequestPage';
@@ -18,6 +20,7 @@ const Container = styled.div`
 
 function App() {
   const { authorized, setAuthorized } = useAuthStore();
+  const { setLatitude, setLongitude } = useRequestInfoStore();
 
   async function authValid(): Promise<void> {
     const response = await getAuthValid();
@@ -28,6 +31,31 @@ function App() {
 
   useEffect(() => {
     authValid();
+  }, []);
+
+  useEffect(() => {
+    messageToNative(1);
+  }, []);
+
+  useEffect(() => {
+    window.addEventListener(
+      'message',
+      (message) => {
+        try {
+          const response = message.data;
+          const data = JSON.parse(response);
+          if (data.type === 'native') {
+            if (data.value.type === 1) {
+              setLatitude(data.value.value.latitude);
+              setLongitude(data.value.value.longitude);
+            }
+          }
+        } catch (err) {
+          // native에서 보내는 메세지가 아닌 것들
+        }
+      },
+      false,
+    );
   }, []);
 
   return (
