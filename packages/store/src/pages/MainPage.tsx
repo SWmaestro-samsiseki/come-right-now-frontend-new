@@ -21,7 +21,7 @@ function MainPage() {
   const { initStandList, initReservationList } = useReservationStore();
   const { initTimeDeal } = useTimeDealStore();
 
-  // stand랑 reservation은 없으면 빈 배열 주는데, timeDeal은 왜 오류?
+  // stand랑 reservation은 없으면 빈 배열 주는데, timeDeal은 왜 오류??
   async function init() {
     const response = await getStoreInfo();
     if (!('error' in response)) {
