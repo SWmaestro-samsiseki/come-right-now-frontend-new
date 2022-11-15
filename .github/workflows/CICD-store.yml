@@ -14,7 +14,7 @@ jobs:
   buildAndDeploy:
     runs-on: ubuntu-18.04
 
-    defatuls:
+    defaults:
       run:
         working-directory: './packages/store'
 
