@@ -9,7 +9,7 @@ import { getReservationInfo } from '../apis/reservationAPI';
 import useRequestInfoStore from '../stores/requestInfoStore';
 import thema from '../styles/thema';
 import PopupConfirm from '../components/PopupConfirm';
-import PopupFail from './popupFail';
+import PopupFail from './PopupFail';
 
 const MapContainer = styled.div`
   position: relative;

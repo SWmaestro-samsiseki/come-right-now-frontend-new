@@ -8,7 +8,7 @@ import useRequestInfoStore from '../stores/requestInfoStore';
 import useReservationStore from '../stores/reservationStore';
 import PopupConfirm from './PopupConfirm';
 import PopupSuccess from './PopupSuccess';
-import PopupFail from './popupFail';
+import PopupFail from './PopupFail';
 import PopupConfirmLoad from './PopupConfirmLoad';
 import { deleteReservation, getDistance } from '../apis/reservationAPI';
 import type { ReservationDTO } from '../interfaces/reservation';

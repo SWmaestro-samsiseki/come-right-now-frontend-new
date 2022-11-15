@@ -10,7 +10,7 @@ import RequestStep from '../components/RequestStep';
 import RequestCategory from '../components/RequestCategory';
 import RequestStatus from '../components/RequestStatus';
 import ConfirmPopup from '../components/PopupConfirm';
-import FailPopup from '../components/popupFail';
+import FailPopup from '../components/PopupFail';
 import { useEffect } from 'react';
 import { fetchCategories } from '../apis/reservationAPI';
 

@@ -8,7 +8,7 @@ import useTimeDealStore from '../stores/timeDealStore';
 import { getCurrenTimeDealByUser, requestTimeDealByUser } from '../apis/timeDealAPI';
 import PopupConfirm from './PopupConfirm';
 import PopupSuccess from './PopupSuccess';
-import PopupFail from './popupFail';
+import PopupFail from './PopupFail';
 import PopupMap from './PopupMap';
 import type { TimeDealUserDTO } from '../interfaces/timeDeal';
 
