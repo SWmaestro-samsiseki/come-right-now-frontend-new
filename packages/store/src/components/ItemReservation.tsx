@@ -8,7 +8,7 @@ import useReservationStore from '../stores/reservationStore';
 import { deleteReservation } from '../apis/reservationAPI';
 import PopupConfirm from './PopupConfirm';
 import PopupSuccess from './PopupSuccess';
-import PopupFail from './PopupFail';
+import PopupFail from './popupFail';
 import type { ReservationDTO } from '../interfaces/reservation';
 import type { SocketResponseDTO } from '../interfaces/common';
 

@@ -7,7 +7,7 @@ import useTimeDealStore from '../stores/timeDealStore';
 import { patchCloseTimeDeal } from '../apis/timeDealAPI';
 import PopupConfirm from './PopupConfirm';
 import PopupSuccess from './PopupSuccess';
-import PopupFail from './PopupFail';
+import PopupFail from './popupFail';
 import ItemParticipant from './ItemParticipant';
 import type { TimeDealStoreDTO } from '../interfaces/timeDeal';
 

@@ -6,7 +6,7 @@ import useSocket from '../hooks/useSocket';
 import useReservationStore from '../stores/reservationStore';
 import { getReservationInfo } from '../apis/reservationAPI';
 import PopupReservation from './PopupReservation';
-import PopupFail from './PopupFail';
+import PopupFail from './popupFail';
 
 function MainSocket() {
   const token = localStorage.getItem('token') as string;

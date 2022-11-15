@@ -6,7 +6,7 @@ import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
 import useAuthStore from '../stores/authStore';
 import { postLogin } from '../apis/authAPI';
-import PopupFail from '../components/PopupFail';
+import PopupFail from '../components/popupFail';
 
 const Container = styled.div`
   display: flex;

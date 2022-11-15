@@ -7,7 +7,7 @@ import withReactContent from 'sweetalert2-react-content';
 import useTimeDealStore from '../stores/timeDealStore';
 import PopupConfirm from './PopupConfirm';
 import PopupSuccess from './PopupSuccess';
-import PopupFail from './PopupFail';
+import PopupFail from './popupFail';
 import { postTimeDeal } from '../apis/timeDealAPI';
 
 const TimeDealCreateContainer = styled.div`

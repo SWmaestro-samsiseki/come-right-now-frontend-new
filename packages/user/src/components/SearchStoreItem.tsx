@@ -9,7 +9,7 @@ import useRequestInfoStore from '../stores/requestInfoStore';
 import { getDistance } from '../apis/reservationAPI';
 import PopupConfirm from './PopupConfirm';
 import PopupSuccess from './PopupSuccess';
-import PopupFail from './PopupFail';
+import PopupFail from './popupFail';
 import PopupMenu from './PopupMenu';
 import type { ReservationDTO } from '../interfaces/reservation';
 

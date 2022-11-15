@@ -9,7 +9,7 @@ import useTimeDealStore from '../stores/timeDealStore';
 import { deleteParticipantByStore } from '../apis/timeDealAPI';
 import PopupConfirm from './PopupConfirm';
 import PopupSuccess from './PopupSuccess';
-import PopupFail from './PopupFail';
+import PopupFail from './popupFail';
 import PopupMap from './PopupMap';
 import type { CurrentTimeDealUserDTO } from '../interfaces/timeDeal';
 
