@@ -1,5 +1,4 @@
 import styled from 'styled-components';
-import useSocket from '../hooks/useSocket';
 import MainSection from '../components/MainSection';
 import MainMenu from '../components/MainMenu';
 
@@ -9,8 +8,6 @@ const Container = styled.div`
 `;
 
 function MainPage() {
-  const { socket } = useSocket(localStorage.getItem('token') as string);
-
   return (
     <Container>
       <MainSection />
