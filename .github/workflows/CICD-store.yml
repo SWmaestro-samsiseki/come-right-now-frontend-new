@@ -3,9 +3,12 @@ name: come right now CICD
 on:
   push:
     branches: ['main']
+    paths:
+      - 'packages/store/**'
   pull_request:
     branches: ['main']
-  paths: 'packages/store/**'
+    paths:
+      - 'packages/store/**'
 
 jobs:
   buildAndDeploy:
