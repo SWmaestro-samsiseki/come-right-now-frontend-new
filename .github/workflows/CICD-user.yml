@@ -1,0 +1,47 @@
+name: come right now CICD
+
+on:
+  push:
+    branches: ['main']
+    paths:
+      - 'packages/user/**'
+  pull_request:
+    branches: ['main']
+    paths:
+      - 'packages/user/**'
+
+jobs:
+  buildAndDeploy:
+    runs-on: ubuntu-18.04
+
+    defaults:
+      run:
+        working-directory: './packages/user'
+
+    strategy:
+      matrix:
+        node-version: [16.15.1]
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - run: npm ci
+
+      - name: build files
+        working-directory: './packages/user'
+        run: npm run build
+
+      - name: aws 세팅
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ap-northeast-2
+
+      - name: Deploy to S3
+        run: aws s3 sync ./build/ s3://jigeumgo-dev-frontend-user --delete
