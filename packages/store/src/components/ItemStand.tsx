@@ -7,7 +7,7 @@ import useSocket from '../hooks/useSocket';
 import useStandStore from '../stores/reservationStore';
 import { deleteReservation } from '../apis/reservationAPI';
 import { calTermTime } from '../utils/time';
-import PopupFail from './popupFail';
+import PopupFail from './PopupFail';
 import type { ReservationDTO } from '../interfaces/reservation';
 import type { SocketResponseDTO } from '../interfaces/common';
 

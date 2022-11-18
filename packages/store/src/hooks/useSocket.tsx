@@ -6,7 +6,7 @@ import useTimeDealStore from '../stores/timeDealStore';
 import { getReservationInfo } from '../apis/reservationAPI';
 import { getParcitipantInfoByStore } from '../apis/timeDealAPI';
 import PopupStand from '../components/PopupStand';
-import PopupFail from '../components/popupFail';
+import PopupFail from '../components/PopupFail';
 
 const BASE_URL = 'http://devserver.jigeumgo.com';
 const socket: { [key: string]: Socket } = {};

@@ -44,7 +44,7 @@ const PopupContainer = styled.div`
   }
 `;
 
-function popupFail({
+function RopupFail({
   title,
   description,
   close,
@@ -63,4 +63,4 @@ function popupFail({
   );
 }
 
-export default popupFail;
+export default RopupFail;

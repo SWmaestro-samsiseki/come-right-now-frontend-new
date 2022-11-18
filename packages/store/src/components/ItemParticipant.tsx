@@ -6,7 +6,7 @@ import { deleteParticipant } from '../apis/timeDealAPI';
 import useTimeDealStore from '../stores/timeDealStore';
 import PopupConfirm from './PopupConfirm';
 import PopupSuccess from './PopupSuccess';
-import PopupFail from './popupFail';
+import PopupFail from './PopupFail';
 import type { MiniUserDTO } from '../interfaces/timeDeal';
 
 const Container = styled.div`
