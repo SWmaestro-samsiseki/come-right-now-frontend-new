@@ -120,7 +120,7 @@ async function getCurrenTimeDealList(
   }
 }
 
-async function deleteParticipantByStore(participantId: number): Promise<boolean | ErrorDTO> {
+async function deleteParticipant(participantId: number): Promise<boolean | ErrorDTO> {
   try {
     const response = await fetch(`${BASE_URL}/participant/${participantId}`, {
       method: 'DELETE',
@@ -151,4 +151,4 @@ async function deleteParticipantByStore(participantId: number): Promise<boolean 
   }
 }
 
-export { getTimeDealList, postTimeDeal, getCurrenTimeDealList, deleteParticipantByStore };
+export { getTimeDealList, postTimeDeal, getCurrenTimeDealList, deleteParticipant };

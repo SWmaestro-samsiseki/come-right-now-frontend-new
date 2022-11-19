@@ -23,6 +23,20 @@ const useTimeDealStore = create<TimeDealStore>((set) => ({
     set((state) => ({
       currentTimeDealList: [...state.currentTimeDealList.filter((ele) => ele.id !== value.id)],
     })),
+  setCheckInTimeDeal: (value: CurrentTimeDealDTO) =>
+    set((state) => ({
+      currentTimeDealList: [
+        ...state.currentTimeDealList.map((ele) => {
+          if (ele.id !== value.id) {
+            return ele;
+          } else {
+            const newItem = ele;
+            newItem.status = 'ARRIVED';
+            return ele;
+          }
+        }),
+      ],
+    })),
 }));
 
 export default useTimeDealStore;

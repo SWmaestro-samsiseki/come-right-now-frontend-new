@@ -1,16 +1,11 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import thema from '../styles/thema';
-import Swal from 'sweetalert2';
-import withReactContent from 'sweetalert2-react-content';
 import useSocket from '../hooks/useSocket';
 import useAuthStore from '../stores/authStore';
 import useTimeDealStore from '../stores/timeDealStore';
-import { deleteParticipantByStore } from '../apis/timeDealAPI';
-import PopupConfirm from './PopupConfirm';
-import PopupSuccess from './PopupSuccess';
-import PopupFail from './PopupFail';
-import PopupMap from './PopupMap';
+import { deleteParticipant } from '../apis/timeDealAPI';
+import { popupConfirm, popupSuccess, popupFail, popupMap } from '../utils/popup';
 import type { CurrentTimeDealDTO } from '../interfaces/timeDeal';
 
 const Container = styled.div`
@@ -87,22 +82,11 @@ const BtnBox = styled.div`
 `;
 
 function ItemCurrentTimeDeal({ item }: { item: CurrentTimeDealDTO }) {
-  const { socket } = useSocket(localStorage.getItem('token') as string);
+  const [limitTime] = useState(new Date(item.endTime).getTime());
+  const [isArrived] = useState(item.status === 'ARRIVED');
   const { latitude, longitude } = useAuthStore();
   const { removeCurrentTimeDeal } = useTimeDealStore();
-  const MySwal = withReactContent(Swal);
-
-  function showMap() {
-    MySwal.fire({
-      html: <PopupMap location={{ la: item.latitude, lo: item.longitude }} />,
-      showConfirmButton: false,
-      width: '370px',
-      padding: 0,
-      customClass: {
-        popup: 'popup-border-radius',
-      },
-    });
-  }
+  const { socket } = useSocket(localStorage.getItem('token') as string);
 
   function calLimitTime(time: Date): string {
     const limit = new Date(time);
@@ -112,22 +96,7 @@ function ItemCurrentTimeDeal({ item }: { item: CurrentTimeDealDTO }) {
   }
 
   function checkIn() {
-    MySwal.fire({
-      html: (
-        <PopupConfirm
-          title="체크인"
-          description={`가게에 도착했습니까?`}
-          confirm={Swal.clickConfirm}
-          close={Swal.close}
-        />
-      ),
-      showConfirmButton: false,
-      width: '280px',
-      padding: 0,
-      customClass: {
-        popup: 'popup-border-radius',
-      },
-    }).then(async ({ isConfirmed }) => {
+    popupConfirm('체크인', '가게에 도착했습니까?').then(async ({ isConfirmed }) => {
       if (isConfirmed) {
         socket.emit(
           'user.check-in-time-deal-test.server',
@@ -140,57 +109,12 @@ function ItemCurrentTimeDeal({ item }: { item: CurrentTimeDealDTO }) {
           (response: { isSuccess: boolean; message?: string }) => {
             if (response.message !== undefined) {
               if (response.isSuccess) {
-                MySwal.fire({
-                  html: (
-                    <PopupSuccess
-                      title="체크인"
-                      description="체크인되었습니다! :)"
-                      close={Swal.clickCancel}
-                    />
-                  ),
-                  showConfirmButton: false,
-                  width: '280px',
-                  padding: 0,
-                  customClass: {
-                    popup: 'popup-border-radius',
-                  },
-                  timer: 2000,
-                });
+                popupSuccess('체크인', '체크인되었습니다! :)', 2000);
               } else {
-                MySwal.fire({
-                  html: (
-                    <PopupFail
-                      title="체크인"
-                      description={response.message}
-                      close={Swal.clickCancel}
-                    />
-                  ),
-                  showConfirmButton: false,
-                  width: '280px',
-                  padding: 0,
-                  customClass: {
-                    popup: 'popup-border-radius',
-                  },
-                  timer: 2000,
-                });
+                popupFail('체크인', response.message, 2000);
               }
             } else {
-              MySwal.fire({
-                html: (
-                  <PopupFail
-                    title="체크인"
-                    description="체크인에 실패했습니다."
-                    close={Swal.clickCancel}
-                  />
-                ),
-                showConfirmButton: false,
-                width: '280px',
-                padding: 0,
-                customClass: {
-                  popup: 'popup-border-radius',
-                },
-                timer: 2000,
-              });
+              popupFail('체크인', '체크인에 실패했습니다! :(', 2000);
             }
           },
         );
@@ -199,18 +123,15 @@ function ItemCurrentTimeDeal({ item }: { item: CurrentTimeDealDTO }) {
   }
 
   useEffect(() => {
-    const endTime = new Date(item.endTime).getTime();
     const intervalId = setInterval(async () => {
       const currentTime = new Date().getTime();
-      if (currentTime > endTime && item.status === 'REQUESTED') {
-        const response = await deleteParticipantByStore(item.participantId);
-        if (typeof response === 'boolean') {
-          console.log('삭제 성공');
-          removeCurrentTimeDeal(item);
-          clearInterval(intervalId);
-        } else {
-          console.log(response.message);
-          clearInterval(intervalId);
+      if (currentTime > limitTime) {
+        if (item.status === 'REQUESTED') {
+          const response = await deleteParticipant(item.participantId);
+          if (typeof response === 'boolean') {
+            clearInterval(intervalId);
+            removeCurrentTimeDeal(item);
+          }
         }
       }
     }, 1000);
@@ -237,8 +158,13 @@ function ItemCurrentTimeDeal({ item }: { item: CurrentTimeDealDTO }) {
         <p>{item.benefit}</p>
       </InfoBox>
       <BtnBox>
-        <button onClick={showMap}>지도보기</button>
-        <button onClick={checkIn} disabled={item.status === 'ARRIVED' ? true : false}>
+        <button
+          onClick={() => {
+            popupMap(item.latitude, item.longitude);
+          }}>
+          지도보기
+        </button>
+        <button onClick={checkIn} disabled={isArrived}>
           체크인
         </button>
       </BtnBox>
