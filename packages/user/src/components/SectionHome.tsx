@@ -7,6 +7,7 @@ import HomeHeader from '../components/HomeHeader';
 import ReservationContainer from './ReservationContainer';
 import CurrentTimeDealContainer from './CurrentTimeDealContainer';
 import TimeDealContainer from './TimeDealContainer';
+import EmptyBar from './EmptyBar';
 
 const MainContainer = styled.div`
   position: relative;
@@ -43,39 +44,36 @@ const RequestBtn = styled.button`
   color: ${(props) => (props.disabled ? thema.color.secondary.main4 : thema.color.primary.main2)};
   text-decoration: none;
 `;
-interface size {
-  h: number;
-}
-const TermDivBox = styled.div<size>`
-  width: 100%;
-  min-height: ${(props) => props.h + 'px'};
-`;
 
 function SectionHome() {
-  const { reservation } = useReservationStore();
   const [isReservation, setIsReservation] = useState(false);
   const navigate = useNavigate();
-
-  function next() {
-    navigate('/request', { replace: true });
-  }
+  const { reservation } = useReservationStore();
 
   useEffect(() => {
-    if (reservation !== null) setIsReservation(true);
-    else setIsReservation(false);
+    if (reservation) {
+      setIsReservation(true);
+    } else {
+      setIsReservation(false);
+    }
   }, [reservation]);
 
   return (
     <MainContainer>
       <HomeHeader />
       <Contents>
+        <EmptyBar value={10} />
         <ReservationContainer />
-        <TermDivBox h={20} />
+        <EmptyBar value={20} />
         <CurrentTimeDealContainer />
-        <TermDivBox h={20} />
+        <EmptyBar value={20} />
         <TimeDealContainer />
       </Contents>
-      <RequestBtn onClick={next} disabled={isReservation}>
+      <RequestBtn
+        onClick={() => {
+          navigate('/request', { replace: true });
+        }}
+        disabled={isReservation}>
         + 실시간 예약
       </RequestBtn>
     </MainContainer>
