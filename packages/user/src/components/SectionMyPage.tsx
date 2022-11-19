@@ -101,17 +101,16 @@ const SubHeader = styled.div`
 `;
 
 function SectionTimeDeal() {
-  const { auth } = useAuthStore();
   const [user, setUser] = useState<UserAuth>();
   const [menuSelect, setMenuSelect] = useState(false);
-
-  const [text, setText] = useState('');
+  const [menuTitle, setMenuTitle] = useState('');
+  const { auth } = useAuthStore();
 
   function select(e: React.MouseEvent) {
     const type = (e.target as Element).getAttribute('data-menu');
     if (type) {
       setMenuSelect(true);
-      setText(type as string);
+      setMenuTitle(type as string);
     }
   }
   function unSelect() {
@@ -168,12 +167,12 @@ function SectionTimeDeal() {
         </SubSection>
         <SubSection>
           <SubHeader>
-            {text}
+            {menuTitle}
             <img src={require('../images/back.png')} alt="이전 이미지" onClick={unSelect} />
           </SubHeader>
-          {text === '이용내역' ? (
+          {menuTitle === '이용내역' ? (
             <HistoryContainer />
-          ) : text === '이벤트' ? null : text === '환경설정' ? null : null}
+          ) : menuTitle === '이벤트' ? null : menuTitle === '환경설정' ? null : null}
         </SubSection>
       </Slider>
     </Container>
