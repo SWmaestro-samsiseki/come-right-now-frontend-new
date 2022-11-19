@@ -2,11 +2,9 @@ import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import styled from 'styled-components';
 import thema from '../styles/thema';
-import Swal from 'sweetalert2';
-import withReactContent from 'sweetalert2-react-content';
 import useAuthStore from '../stores/authStore';
 import { postLogin } from '../apis/authAPI';
-import PopupFail from '../components/PopupFail';
+import { popupFail } from '../utils/popup';
 
 const Container = styled.div`
   display: flex;
@@ -86,31 +84,24 @@ function LoginPage() {
   const [pw, setPw] = useState('');
   const navigate = useNavigate();
   const { setAuthorized } = useAuthStore();
-  const MySwal = withReactContent(Swal);
 
   function changeId(e: React.ChangeEvent<HTMLInputElement>) {
     setEmail(e.target.value);
   }
+
   function changePw(e: React.ChangeEvent<HTMLInputElement>) {
     setPw(e.target.value);
   }
+
   async function login() {
     const response = await postLogin(email, pw);
-
     if (!('error' in response)) {
       localStorage.setItem('token', response.token);
       setAuthorized();
       navigate('/main', { replace: true });
     } else {
-      MySwal.fire({
-        html: <PopupFail title="로그인 실패" description={response.message} close={Swal.close} />,
-        showConfirmButton: false,
-        width: '480px',
-        padding: 0,
-        customClass: {
-          popup: 'popup-border-radius',
-        },
-      });
+      popupFail('로그인 실패', response.message);
+      setPw('');
     }
   }
 
