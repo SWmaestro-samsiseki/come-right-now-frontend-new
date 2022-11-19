@@ -5,6 +5,7 @@ import thema from '../styles/thema';
 import useAuthStore from '../stores/authStore';
 import useReservationStore from '../stores/reservationStore';
 import useTimeDealStore from '../stores/timeDealStore';
+import { getReservation } from '../apis/reservationAPI';
 import { getTimeDealList, getCurrenTimeDealList } from '../apis/timeDealAPI';
 import HomeHeader from '../components/HomeHeader';
 import ReservationContainer from './ReservationContainer';
@@ -49,12 +50,20 @@ const RequestBtn = styled.button`
 `;
 
 function SectionHome() {
-  const [isReservation, setIsReservation] = useState(false);
   const navigate = useNavigate();
-  const { latitude, longitude } = useAuthStore();
-  const { reservation } = useReservationStore();
+  const { auth, latitude, longitude } = useAuthStore();
+  const { reservation, addReservation } = useReservationStore();
+  const [isReservation, setIsReservation] = useState(false);
   const { initTimeDeal, initCurrentTimeDeal } = useTimeDealStore();
 
+  const fetchReservation = async (id: string) => {
+    const response = await getReservation(id);
+    if (!('error' in response)) {
+      addReservation(response[0]);
+    } else {
+      console.log(response.message);
+    }
+  };
   const fetchTimeDealList = async (latitude: number, longitude: number) => {
     const response = await getTimeDealList(latitude, longitude);
     if (!('error' in response)) {
@@ -63,14 +72,20 @@ function SectionHome() {
       console.log(response.message);
     }
   };
-  async function fetchCurrentTimeDeal(latitude: number, longitude: number) {
+  const fetchCurrentTimeDeal = async (latitude: number, longitude: number) => {
     const response = await getCurrenTimeDealList(latitude, longitude);
     if (!('error' in response)) {
       initCurrentTimeDeal(response);
     } else {
       console.log(response.message);
     }
-  }
+  };
+
+  useEffect(() => {
+    if (auth) {
+      fetchReservation(auth.id);
+    }
+  }, [auth]);
 
   useEffect(() => {
     if (latitude && longitude) {

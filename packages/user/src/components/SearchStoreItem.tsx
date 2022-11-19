@@ -239,6 +239,13 @@ function SearchStoreItem({ item, map }: { item: ReservationDTO; map: naver.maps.
     });
   }
 
+  const fetchDistance = async (id: string, latitude: number, longitude: number) => {
+    const response = await getDistance(id, latitude, longitude);
+    if (!('error' in response)) {
+      setDistance(String(response.distanceMeter));
+    }
+  };
+
   useEffect(() => {
     const intervalId = setInterval(() => {
       const total = limitTime - new Date().getTime();
@@ -260,13 +267,7 @@ function SearchStoreItem({ item, map }: { item: ReservationDTO; map: naver.maps.
 
   useEffect(() => {
     if (latitude && longitude) {
-      getDistance(item.store.id, latitude, longitude).then((res) => {
-        if (res) {
-          setDistance(res.distanceMeter);
-        } else {
-          console.log('거리를 가져오지 못했습니다.');
-        }
-      });
+      fetchDistance(item.store.id, latitude, longitude);
     }
   }, []);
 

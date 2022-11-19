@@ -1,17 +1,14 @@
-import { useEffect } from 'react';
 import styled from 'styled-components';
 import thema from '../styles/thema';
-import useAuthStore from '../stores/authStore';
 import useReservationStore from '../stores/reservationStore';
-import { getReservation } from '../apis/reservationAPI';
 import ReservationItem from './ReservationItem';
 
 const Container = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 320px;
-  height: auto;
+  width: calc(100% - 40px);
+  height: fit-content;
   border-radius: 8px;
 `;
 
@@ -27,27 +24,14 @@ const EmptyReservation = styled.div`
 `;
 
 function ReservationContainer() {
-  const { auth } = useAuthStore();
-  const { reservation, addReservation } = useReservationStore();
-
-  useEffect(() => {
-    if (auth !== null) {
-      getReservation(auth.id).then((res) => {
-        if (!('error' in res)) {
-          addReservation(res[0]);
-        } else {
-          console.log(res.message);
-        }
-      });
-    }
-  }, [auth]);
+  const { reservation } = useReservationStore();
 
   return (
     <Container>
-      {!reservation ? (
-        <EmptyReservation>예약 내역이 없습니다.</EmptyReservation>
-      ) : (
+      {reservation ? (
         <ReservationItem reservation={reservation} />
+      ) : (
+        <EmptyReservation>예약 내역이 없습니다.</EmptyReservation>
       )}
     </Container>
   );

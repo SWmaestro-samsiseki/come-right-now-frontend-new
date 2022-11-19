@@ -4,6 +4,7 @@ import PopupConfirm from '../components/PopupConfirm';
 import PopupSuccess from '../components/PopupSuccess';
 import PopupFail from '../components/PopupFail';
 import PopupMap from '../components/PopupMap';
+import PopupSelect from '../components/PopupSelect';
 
 const MySwal = withReactContent(Swal);
 
@@ -88,4 +89,23 @@ function popupMap(latitude: number, longitude: number) {
   });
 }
 
-export { popupFail, popupSuccess, popupConfirm, popupMap };
+function popupSelect() {
+  MySwal.fire({
+    html: (
+      <PopupSelect
+        title="길 찾기"
+        description={'원하는 서비스를 골라주세요'}
+        confirm={Swal.clickConfirm}
+        close={Swal.close}
+      />
+    ),
+    showConfirmButton: false,
+    width: '280px',
+    padding: 0,
+    customClass: {
+      popup: 'popup-border-radius',
+    },
+  });
+}
+
+export { popupFail, popupSuccess, popupConfirm, popupMap, popupSelect };

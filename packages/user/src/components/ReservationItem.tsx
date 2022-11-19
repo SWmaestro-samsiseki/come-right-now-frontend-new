@@ -1,16 +1,11 @@
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import thema from '../styles/thema';
-import Swal from 'sweetalert2';
-import withReactContent from 'sweetalert2-react-content';
 import useSocket from '../hooks/useSocket';
 import useAuthStore from '../stores/authStore';
 import useReservationStore from '../stores/reservationStore';
-import PopupConfirm from './PopupConfirm';
-import PopupSuccess from './PopupSuccess';
-import PopupFail from './PopupFail';
-import PopupConfirmLoad from './PopupConfirmLoad';
 import { deleteReservation, getDistance } from '../apis/reservationAPI';
+import { popupConfirm, popupFail, popupSelect, popupSuccess } from '../utils/popup';
 import type { ReservationDTO } from '../interfaces/reservation';
 
 const ItemContainer = styled.div`
@@ -19,6 +14,7 @@ const ItemContainer = styled.div`
   align-items: center;
   width: 100%;
   height: auto;
+  border: 1px solid ${thema.color.secondary.main3};
   border-radius: 8px;
   padding: 16px 20px;
 `;
@@ -41,7 +37,7 @@ const MainHeader = styled.div`
   & span {
     margin-left: 5px;
     font: ${thema.font.pb2};
-    color: #282828;
+    color: ${thema.color.primary.main2};
   }
 `;
 const MainInfo = styled.div`
@@ -167,18 +163,13 @@ const DetailBtn = styled.div`
     border: 1px solid ${thema.color.alert.red};
   }
 `;
+
 function ReservationItem({ reservation }: { reservation: ReservationDTO }) {
-  const token = localStorage.getItem('token') as string;
-  const { socket } = useSocket(token);
-  const { latitude, longitude } = useAuthStore();
-  const { removeReservation, updateReservation } = useReservationStore();
   const [distance, setDistance] = useState('');
   const [isDetail, setIsDetail] = useState(false);
-  const MySwal = withReactContent(Swal);
-
-  function showDetail() {
-    setIsDetail(!isDetail);
-  }
+  const { latitude, longitude } = useAuthStore();
+  const { removeReservation, updateReservation } = useReservationStore();
+  const { socket } = useSocket(localStorage.getItem('token') as string);
 
   function convertTime(time: Date): string {
     const temp = new Date(time).toLocaleTimeString();
@@ -192,41 +183,11 @@ function ReservationItem({ reservation }: { reservation: ReservationDTO }) {
   }
 
   function findLoad() {
-    MySwal.fire({
-      html: (
-        <PopupConfirmLoad
-          title="길 찾기"
-          description={'원하는 서비스를 골라주세요'}
-          confirm={Swal.clickConfirm}
-          close={Swal.close}
-        />
-      ),
-      showConfirmButton: false,
-      width: '280px',
-      padding: 0,
-      customClass: {
-        popup: 'fail-popup-border',
-      },
-    });
+    popupSelect();
   }
 
   function delay() {
-    MySwal.fire({
-      html: (
-        <PopupConfirm
-          title="예약지연"
-          description={'예약시간을 5분 지연시키겠습니까?'}
-          confirm={Swal.clickConfirm}
-          close={Swal.close}
-        />
-      ),
-      showConfirmButton: false,
-      width: '280px',
-      padding: 0,
-      customClass: {
-        popup: 'fail-popup-border',
-      },
-    }).then((result) => {
+    popupConfirm('예약지연', '예약시간을 5분 지연시키겠습니까?').then((result) => {
       if (result.isConfirmed) {
         socket.emit(
           'user.delay-reservation.server',
@@ -234,60 +195,16 @@ function ReservationItem({ reservation }: { reservation: ReservationDTO }) {
           (response: { isSuccess: boolean; count: number; estimatedTime: Date }) => {
             if (response.isSuccess) {
               updateReservation(reservation, response.estimatedTime);
-              console.log(`시간 지연에 성공했습니다.`);
-              MySwal.fire({
-                html: (
-                  <PopupSuccess
-                    title="예약지연"
-                    description="예약시간을 지연시켰습니다."
-                    close={Swal.clickCancel}
-                  />
-                ),
-                showConfirmButton: false,
-                width: '280px',
-                padding: 0,
-                customClass: {
-                  popup: 'fail-popup-border',
-                },
-                timer: 2000,
-              });
+              popupSuccess('예약지연', '예약시간을 지연시켰습니다.', 2000);
             } else {
               if ('count' in response) {
-                console.log(`시간 지연에 실패했습니다. 최대 지연회수는 ${response.count}회입니다.`);
-                MySwal.fire({
-                  html: (
-                    <PopupFail
-                      title="예약지연"
-                      description={`시간 지연에 실패했습니다! 최대 지연회수는 ${response.count}회입니다.`}
-                      close={Swal.clickCancel}
-                    />
-                  ),
-                  showConfirmButton: false,
-                  width: '280px',
-                  padding: 0,
-                  customClass: {
-                    popup: 'fail-popup-border',
-                  },
-                  timer: 2000,
-                });
+                popupFail(
+                  '예약지연',
+                  `시간 지연에 실패했습니다! 최대 지연회수는 ${response.count}회입니다.`,
+                  2000,
+                );
               } else {
-                console.log(`시간 지연에 실패했습니다.`);
-                MySwal.fire({
-                  html: (
-                    <PopupFail
-                      title="예약지연"
-                      description={'예약지연에 실패했습니다!'}
-                      close={Swal.clickCancel}
-                    />
-                  ),
-                  showConfirmButton: false,
-                  width: '280px',
-                  padding: 0,
-                  customClass: {
-                    popup: 'fail-popup-border',
-                  },
-                  timer: 2000,
-                });
+                popupFail('예약지연', '예약지연에 실패했습니다!', 2000);
               }
             }
           },
@@ -297,22 +214,7 @@ function ReservationItem({ reservation }: { reservation: ReservationDTO }) {
   }
 
   function reject() {
-    MySwal.fire({
-      html: (
-        <PopupConfirm
-          title="예약취소"
-          description={'예약을 취소하겠습니까?'}
-          confirm={Swal.clickConfirm}
-          close={Swal.close}
-        />
-      ),
-      showConfirmButton: false,
-      width: '280px',
-      padding: 0,
-      customClass: {
-        popup: 'fail-popup-border',
-      },
-    }).then((result) => {
+    popupConfirm('예약취소', '예약을 취소하시겠습니까?').then((result) => {
       if (result.isConfirmed) {
         socket.emit(
           'user.cancel-reservation.server',
@@ -321,62 +223,14 @@ function ReservationItem({ reservation }: { reservation: ReservationDTO }) {
             if (response.isSuccess) {
               deleteReservation(response.reservationId).then((res) => {
                 if (typeof res === 'boolean') {
-                  console.log('예약이 성공적으로 취소되었습니다.');
                   removeReservation();
-                  MySwal.fire({
-                    html: (
-                      <PopupSuccess
-                        title="예약취소"
-                        description="예약을 취소했습니다."
-                        close={Swal.clickCancel}
-                      />
-                    ),
-                    showConfirmButton: false,
-                    width: '280px',
-                    padding: 0,
-                    customClass: {
-                      popup: 'fail-popup-border',
-                    },
-                    timer: 2000,
-                  });
+                  popupSuccess('예약취소', '예약을 취소했습니다.', 2000);
                 } else {
-                  console.log('예약을 취소하지 못했습니다.');
-                  MySwal.fire({
-                    html: (
-                      <PopupFail
-                        title="예약취소"
-                        description={res.message}
-                        close={Swal.clickCancel}
-                      />
-                    ),
-                    showConfirmButton: false,
-                    width: '280px',
-                    padding: 0,
-                    customClass: {
-                      popup: 'fail-popup-border',
-                    },
-                    timer: 2000,
-                  });
+                  popupFail('예약취소', res.message, 2000);
                 }
               });
             } else {
-              console.log('서버오류로 인해 예약취소를 하지 못했습니다.');
-              MySwal.fire({
-                html: (
-                  <PopupFail
-                    title="예약취소"
-                    description="서버오류로 인해 예약취소를 하지 못했습니다."
-                    close={Swal.clickCancel}
-                  />
-                ),
-                showConfirmButton: false,
-                width: '280px',
-                padding: 0,
-                customClass: {
-                  popup: 'fail-popup-border',
-                },
-                timer: 2000,
-              });
+              popupFail('예약취소', '서버오류로 인해 예약취소를 하지 못했습니다.', 2000);
             }
           },
         );
@@ -384,17 +238,18 @@ function ReservationItem({ reservation }: { reservation: ReservationDTO }) {
     });
   }
 
-  useEffect(() => {
-    if (reservation && latitude && longitude) {
-      getDistance(reservation.store.id, latitude, longitude).then((res) => {
-        if (res) {
-          setDistance(res.distanceMeter);
-        } else {
-          console.log('거리를 가져오지 못했습니다.');
-        }
-      });
+  const fetchDistance = async (id: string, latitude: number, longitude: number) => {
+    const response = await getDistance(id, latitude, longitude);
+    if (!('error' in response)) {
+      setDistance(String(response.distanceMeter));
     }
-  }, [reservation, latitude, longitude]);
+  };
+
+  useEffect(() => {
+    if (latitude && longitude) {
+      fetchDistance(reservation.store.id, latitude, longitude);
+    }
+  }, [latitude, longitude]);
 
   return (
     <ItemContainer>
@@ -435,7 +290,12 @@ function ReservationItem({ reservation }: { reservation: ReservationDTO }) {
                 ? `도착까지 ${calTime(reservation.estimatedTime)}분 남았습니다.`
                 : `도착시간이 지났습니다!`}
             </p>
-            <span onClick={showDetail}>{isDetail ? '접기' : '더보기'}</span>
+            <span
+              onClick={() => {
+                setIsDetail(!isDetail);
+              }}>
+              {isDetail ? '접기' : '더보기'}
+            </span>
           </div>
         </MainFooter>
       </Container>

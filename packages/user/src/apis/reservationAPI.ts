@@ -112,18 +112,35 @@ async function getReservationHistory(id: string): Promise<HistoryUserDTO[][] | E
   }
 }
 
-async function getDistance(id: string, latitude: number, longitude: number) {
-  const response = await fetch(
-    `${BASE_URL}/store/${id}/distance?latitude=${latitude}&longitude=${longitude}`,
-    {
-      method: 'GET',
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem('token')}`,
+async function getDistance(
+  id: string,
+  latitude: number,
+  longitude: number,
+): Promise<{ distanceMeter: number } | ErrorDTO> {
+  try {
+    const response = await fetch(
+      `${BASE_URL}/store/${id}/distance?latitude=${latitude}&longitude=${longitude}`,
+      {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
       },
-    },
-  );
-  const parse = await response.json();
-  return parse;
+    );
+    if (response.ok) {
+      return await response.json();
+    } else {
+      return {
+        error: true,
+        message: '서버오류로 인해 거리를 가져오지 못했습니다.',
+      };
+    }
+  } catch (err) {
+    return {
+      error: true,
+      message: '서버오류로 인해 거리를 가져오지 못했습니다.',
+    };
+  }
 }
 
 export {

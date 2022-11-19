@@ -48,7 +48,7 @@ const BtnContainer = styled.div`
   }
 `;
 
-function ConfirmLoadPopup({
+function PopupSelect({
   title,
   description,
   confirm,
@@ -79,4 +79,4 @@ function ConfirmLoadPopup({
   );
 }
 
-export default ConfirmLoadPopup;
+export default PopupSelect;
