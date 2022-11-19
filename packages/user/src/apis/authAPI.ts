@@ -55,7 +55,7 @@ async function postLogin(email: string, password: string): Promise<{ token: stri
   }
 }
 
-async function getStoreInfo(): Promise<UserAuth | ErrorDTO> {
+async function getUserInfo(): Promise<UserAuth | ErrorDTO> {
   try {
     const response = await fetch(`${BASE_URL}/user/my-info`, {
       method: 'GET',
@@ -86,4 +86,4 @@ async function getStoreInfo(): Promise<UserAuth | ErrorDTO> {
   }
 }
 
-export { getAuthValid, postLogin, getStoreInfo };
+export { getAuthValid, postLogin, getUserInfo };

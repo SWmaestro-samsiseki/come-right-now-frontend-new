@@ -11,8 +11,8 @@ interface Auth {
 const useAuthStore = create<Auth>((set) => ({
   authorized: false,
   setAuthorized: () =>
-    set(() => ({
-      authorized: true,
+    set((state) => ({
+      authorized: !state.auth,
     })),
   auth: null,
   setAuth: (value: UserAuth) => set(() => ({ auth: value })),
