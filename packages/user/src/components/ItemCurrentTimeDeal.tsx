@@ -11,7 +11,7 @@ import PopupConfirm from './PopupConfirm';
 import PopupSuccess from './PopupSuccess';
 import PopupFail from './PopupFail';
 import PopupMap from './PopupMap';
-import type { CurrentTimeDealUserDTO } from '../interfaces/timeDeal';
+import type { CurrentTimeDealDTO } from '../interfaces/timeDeal';
 
 const Container = styled.div`
   display: flex;
@@ -86,7 +86,7 @@ const BtnBox = styled.div`
   }
 `;
 
-function ItemCurrentTimeDeal({ item }: { item: CurrentTimeDealUserDTO }) {
+function ItemCurrentTimeDeal({ item }: { item: CurrentTimeDealDTO }) {
   const { socket } = useSocket(localStorage.getItem('token') as string);
   const { latitude, longitude } = useAuthStore();
   const { removeCurrentTimeDeal } = useTimeDealStore();

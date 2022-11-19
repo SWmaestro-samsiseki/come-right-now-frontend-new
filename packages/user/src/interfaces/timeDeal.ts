@@ -8,7 +8,7 @@ interface TimeDealUserDTO {
   store: StoreInfo;
 }
 
-interface CurrentTimeDealUserDTO {
+interface CurrentTimeDealDTO {
   id: number;
   benefit: string;
   endTime: Date;
@@ -22,4 +22,4 @@ interface CurrentTimeDealUserDTO {
   status: string;
 }
 
-export type { TimeDealUserDTO, CurrentTimeDealUserDTO };
+export type { TimeDealUserDTO, CurrentTimeDealDTO };

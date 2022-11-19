@@ -1,9 +1,6 @@
-import { useEffect } from 'react';
 import styled from 'styled-components';
 import thema from '../styles/thema';
-import useAuthStore from '../stores/authStore';
 import useTimeDealStore from '../stores/timeDealStore';
-import { getCurrenTimeDealByUser } from '../apis/timeDealAPI';
 import ItemCurrentTimeDeal from './ItemCurrentTimeDeal';
 
 const Container = styled.div`
@@ -48,23 +45,8 @@ const EmptyBox = styled.div`
 `;
 
 function CurrentTimeDealContainer() {
-  const { latitude, longitude } = useAuthStore();
-  const { currentTimeDealList, initCurrentTimeDeal } = useTimeDealStore();
+  const { currentTimeDealList } = useTimeDealStore();
 
-  async function fetchCurrentTimeDeal(latitude: number, longitude: number) {
-    const response = await getCurrenTimeDealByUser(latitude, longitude);
-    if (!('error' in response)) {
-      initCurrentTimeDeal(response);
-    } else {
-      console.log(response.message);
-    }
-  }
-
-  useEffect(() => {
-    if (latitude && longitude) {
-      fetchCurrentTimeDeal(latitude, longitude);
-    }
-  }, [latitude, longitude]);
   return (
     <Container>
       <Header>타임딜 신청내역</Header>

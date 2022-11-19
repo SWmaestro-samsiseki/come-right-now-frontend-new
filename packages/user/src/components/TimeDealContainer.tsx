@@ -2,10 +2,8 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import thema from '../styles/thema';
-import useAuthStore from '../stores/authStore';
 import useTimeDealStore from '../stores/timeDealStore';
 import ItemTimeDeal from './ItemTimeDeal';
-import { getTimeDealList } from '../apis/timeDealAPI';
 import type { TimeDealUserDTO } from '../interfaces/timeDeal';
 
 const Container = styled.div`
@@ -81,28 +79,12 @@ const MoreBox = styled.div`
 
 function TimeDealContainer() {
   const navigate = useNavigate();
-  const { latitude, longitude } = useAuthStore();
-  const { timeDealList, initTimeDeal } = useTimeDealStore();
   const [list, setList] = useState<TimeDealUserDTO[]>([]);
+  const { timeDealList } = useTimeDealStore();
 
-  function moreTimeDeal() {
+  function showMoreTimeDeal() {
     navigate('timedeal', { replace: true });
   }
-
-  async function fetchTimeDeal(latitude: number, longitude: number) {
-    const response = await getTimeDealList(latitude, longitude);
-    if (!('error' in response)) {
-      initTimeDeal(response);
-    } else {
-      console.log(response.message);
-    }
-  }
-
-  useEffect(() => {
-    if (latitude && longitude) {
-      fetchTimeDeal(latitude, longitude);
-    }
-  }, [latitude, longitude]);
 
   useEffect(() => {
     if (timeDealList.length > 5) {
@@ -116,11 +98,11 @@ function TimeDealContainer() {
     <Container>
       <Header>
         <p>오늘의 타임딜</p>
-        <p onClick={moreTimeDeal}>더보기 {'>'}</p>
+        <p onClick={showMoreTimeDeal}>더보기 {'>'}</p>
       </Header>
       <Content>
         {list.length === 0 ? (
-          <EmptyBox>타임딜이 없습니다.</EmptyBox>
+          <EmptyBox>현재 타임딜이 없습니다.</EmptyBox>
         ) : (
           <Slider>
             {list.map((item, index) => (
@@ -128,7 +110,7 @@ function TimeDealContainer() {
             ))}
             {timeDealList.length > 5 ? (
               <MoreBox>
-                <div onClick={moreTimeDeal}>더보기</div>
+                <div onClick={showMoreTimeDeal}>더보기</div>
               </MoreBox>
             ) : null}
           </Slider>

@@ -2,7 +2,10 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import thema from '../styles/thema';
+import useAuthStore from '../stores/authStore';
 import useReservationStore from '../stores/reservationStore';
+import useTimeDealStore from '../stores/timeDealStore';
+import { getTimeDealList, getCurrenTimeDealList } from '../apis/timeDealAPI';
 import HomeHeader from '../components/HomeHeader';
 import ReservationContainer from './ReservationContainer';
 import CurrentTimeDealContainer from './CurrentTimeDealContainer';
@@ -48,7 +51,33 @@ const RequestBtn = styled.button`
 function SectionHome() {
   const [isReservation, setIsReservation] = useState(false);
   const navigate = useNavigate();
+  const { latitude, longitude } = useAuthStore();
   const { reservation } = useReservationStore();
+  const { initTimeDeal, initCurrentTimeDeal } = useTimeDealStore();
+
+  const fetchTimeDealList = async (latitude: number, longitude: number) => {
+    const response = await getTimeDealList(latitude, longitude);
+    if (!('error' in response)) {
+      initTimeDeal(response);
+    } else {
+      console.log(response.message);
+    }
+  };
+  async function fetchCurrentTimeDeal(latitude: number, longitude: number) {
+    const response = await getCurrenTimeDealList(latitude, longitude);
+    if (!('error' in response)) {
+      initCurrentTimeDeal(response);
+    } else {
+      console.log(response.message);
+    }
+  }
+
+  useEffect(() => {
+    if (latitude && longitude) {
+      fetchTimeDealList(latitude, longitude);
+      fetchCurrentTimeDeal(latitude, longitude);
+    }
+  }, [latitude, longitude]);
 
   useEffect(() => {
     if (reservation) {

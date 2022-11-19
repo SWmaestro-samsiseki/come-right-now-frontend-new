@@ -14,7 +14,6 @@ const Map = styled.div`
 
 function MapPopup({ location }: { location: { la: number; lo: number } }) {
   const { latitude, longitude } = useAuthStore();
-  // const { setMap } = useMap()
 
   useEffect(() => {
     const initMap = () => {

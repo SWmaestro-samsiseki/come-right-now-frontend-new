@@ -1,5 +1,5 @@
 import type { ErrorDTO } from '../interfaces/common';
-import type { TimeDealUserDTO, CurrentTimeDealUserDTO } from '../interfaces/timeDeal';
+import type { TimeDealUserDTO, CurrentTimeDealDTO } from '../interfaces/timeDeal';
 
 const BASE_URL = 'http://devserver.jigeumgo.com';
 
@@ -41,7 +41,7 @@ async function getTimeDealList(
   }
 }
 
-async function requestTimeDealByUser(timeDealId: number): Promise<boolean | ErrorDTO> {
+async function postTimeDeal(timeDealId: number): Promise<boolean | ErrorDTO> {
   try {
     const response = await fetch(`${BASE_URL}/participant`, {
       method: 'POST',
@@ -82,10 +82,10 @@ async function requestTimeDealByUser(timeDealId: number): Promise<boolean | Erro
   }
 }
 
-async function getCurrenTimeDealByUser(
+async function getCurrenTimeDealList(
   latitude: number,
   longitude: number,
-): Promise<CurrentTimeDealUserDTO[] | ErrorDTO> {
+): Promise<CurrentTimeDealDTO[] | ErrorDTO> {
   try {
     const response = await fetch(
       `${BASE_URL}/time-deal/userDeals?latitude=${latitude}&longitude=${longitude}`,
@@ -151,9 +151,4 @@ async function deleteParticipantByStore(participantId: number): Promise<boolean 
   }
 }
 
-export {
-  getTimeDealList,
-  requestTimeDealByUser,
-  getCurrenTimeDealByUser,
-  deleteParticipantByStore,
-};
+export { getTimeDealList, postTimeDeal, getCurrenTimeDealList, deleteParticipantByStore };

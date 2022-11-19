@@ -1,15 +1,10 @@
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import thema from '../styles/thema';
-import Swal from 'sweetalert2';
-import withReactContent from 'sweetalert2-react-content';
 import useAuthStore from '../stores/authStore';
 import useTimeDealStore from '../stores/timeDealStore';
-import { getCurrenTimeDealByUser, requestTimeDealByUser } from '../apis/timeDealAPI';
-import PopupConfirm from './PopupConfirm';
-import PopupSuccess from './PopupSuccess';
-import PopupFail from './PopupFail';
-import PopupMap from './PopupMap';
+import { postTimeDeal, getCurrenTimeDealList } from '../apis/timeDealAPI';
+import { popupFail, popupSuccess, popupConfirm, popupMap } from '../utils/popup';
 import type { TimeDealUserDTO } from '../interfaces/timeDeal';
 
 const Container = styled.div`
@@ -126,20 +121,9 @@ const BtnBox = styled.div`
 `;
 
 function ItemTimeDeal({ item }: { item: TimeDealUserDTO }) {
-  const { latitude, longitude } = useAuthStore();
-  const { initCurrentTimeDeal } = useTimeDealStore();
-
-  async function fetchCurrentTimeDeal(latitude: number, longitude: number) {
-    const response = await getCurrenTimeDealByUser(latitude, longitude);
-    if (!('error' in response)) {
-      initCurrentTimeDeal(response);
-    } else {
-      console.log(response.message);
-    }
-  }
   const [limitTime, setLimitTime] = useState('00:00');
-  const { removeTimeDeal } = useTimeDealStore();
-  const MySwal = withReactContent(Swal);
+  const { latitude, longitude } = useAuthStore();
+  const { removeTimeDeal, initCurrentTimeDeal } = useTimeDealStore();
 
   function calLimitTime(time: Date): string {
     const limit = new Date(time);
@@ -149,74 +133,30 @@ function ItemTimeDeal({ item }: { item: TimeDealUserDTO }) {
   }
 
   function showMap() {
-    MySwal.fire({
-      html: <PopupMap location={{ la: item.store.latitude, lo: item.store.longitude }} />,
-      showConfirmButton: false,
-      width: '370px',
-      padding: 0,
-      customClass: {
-        popup: 'popup-border-radius',
-      },
-    });
+    popupMap(item.store.latitude, item.store.longitude);
   }
 
   function requestTimeDeal() {
-    MySwal.fire({
-      html: (
-        <PopupConfirm
-          title="타임딜 신청"
-          description={`해당 타임딜을 신청하시겠습니까?`}
-          confirm={Swal.clickConfirm}
-          close={Swal.close}
-        />
-      ),
-      showConfirmButton: false,
-      width: '280px',
-      padding: 0,
-      customClass: {
-        popup: 'popup-border-radius',
-      },
-    }).then(async ({ isConfirmed }) => {
+    popupConfirm('타임딜 신청', '해당 타임딜을 신청하시겠습니까?').then(async ({ isConfirmed }) => {
       if (isConfirmed) {
-        const response = await requestTimeDealByUser(item.id);
+        const response = await postTimeDeal(item.id);
         if (typeof response === 'boolean') {
           fetchCurrentTimeDeal(latitude as number, longitude as number);
-          MySwal.fire({
-            html: (
-              <PopupSuccess
-                title="타임딜 신청"
-                description="타임딜 신청에 성공했습니다."
-                close={Swal.clickCancel}
-              />
-            ),
-            showConfirmButton: false,
-            width: '280px',
-            padding: 0,
-            customClass: {
-              popup: 'popup-border-radius',
-            },
-            timer: 2000,
-          });
+          popupSuccess('타임딜 신청', '타임딜 신청에 성공했습니다.', 2000);
         } else {
-          MySwal.fire({
-            html: (
-              <PopupFail
-                title="타임딜 신청"
-                description={response.message}
-                close={Swal.clickCancel}
-              />
-            ),
-            showConfirmButton: false,
-            width: '280px',
-            padding: 0,
-            customClass: {
-              popup: 'popup-border-radius',
-            },
-            timer: 2000,
-          });
+          popupFail('타임딜 신청', response.message, 2000);
         }
       }
     });
+  }
+
+  async function fetchCurrentTimeDeal(latitude: number, longitude: number) {
+    const response = await getCurrenTimeDealList(latitude, longitude);
+    if (!('error' in response)) {
+      initCurrentTimeDeal(response);
+    } else {
+      console.log(response.message);
+    }
   }
 
   useEffect(() => {

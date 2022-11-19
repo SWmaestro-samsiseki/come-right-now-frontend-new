@@ -1,26 +1,25 @@
 import create from 'zustand';
-import type { TimeDealUserDTO, CurrentTimeDealUserDTO } from '../interfaces/timeDeal';
+import type { TimeDealUserDTO, CurrentTimeDealDTO } from '../interfaces/timeDeal';
 
 interface TimeDealStore {
   timeDealList: TimeDealUserDTO[];
-  currentTimeDealList: CurrentTimeDealUserDTO[];
   initTimeDeal: (value: TimeDealUserDTO[]) => void;
   removeTimeDeal: (value: TimeDealUserDTO) => void;
-  initCurrentTimeDeal: (value: CurrentTimeDealUserDTO[]) => void;
-  removeCurrentTimeDeal: (value: CurrentTimeDealUserDTO) => void;
+  currentTimeDealList: CurrentTimeDealDTO[];
+  initCurrentTimeDeal: (value: CurrentTimeDealDTO[]) => void;
+  removeCurrentTimeDeal: (value: CurrentTimeDealDTO) => void;
 }
 
 const useTimeDealStore = create<TimeDealStore>((set) => ({
   timeDealList: [],
-  currentTimeDealList: [],
   initTimeDeal: (value: TimeDealUserDTO[]) => set(() => ({ timeDealList: value })),
   removeTimeDeal: (value: TimeDealUserDTO) =>
     set((state) => ({
       timeDealList: [...state.timeDealList.filter((ele) => ele.id !== value.id)],
     })),
-  initCurrentTimeDeal: (value: CurrentTimeDealUserDTO[]) =>
-    set(() => ({ currentTimeDealList: value })),
-  removeCurrentTimeDeal: (value: CurrentTimeDealUserDTO) =>
+  currentTimeDealList: [],
+  initCurrentTimeDeal: (value: CurrentTimeDealDTO[]) => set(() => ({ currentTimeDealList: value })),
+  removeCurrentTimeDeal: (value: CurrentTimeDealDTO) =>
     set((state) => ({
       currentTimeDealList: [...state.currentTimeDealList.filter((ele) => ele.id !== value.id)],
     })),

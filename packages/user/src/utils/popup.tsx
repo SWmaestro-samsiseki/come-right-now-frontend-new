@@ -1,14 +1,74 @@
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
+import PopupConfirm from '../components/PopupConfirm';
+import PopupSuccess from '../components/PopupSuccess';
 import PopupFail from '../components/PopupFail';
+import PopupMap from '../components/PopupMap';
 
 const MySwal = withReactContent(Swal);
 
-function popupFail(title: string, message: string) {
-  MySwal.fire({
-    html: <PopupFail title={title} description={message} close={Swal.close} />,
+function popupFail(title: string, message: string, timer?: number) {
+  if (timer) {
+    MySwal.fire({
+      html: <PopupFail title={title} description={message} close={Swal.close} />,
+      showConfirmButton: false,
+      width: '280px',
+      padding: 0,
+      customClass: {
+        popup: 'popup-border-radius',
+      },
+      timer: timer,
+    });
+  } else {
+    MySwal.fire({
+      html: <PopupFail title={title} description={message} close={Swal.close} />,
+      showConfirmButton: false,
+      width: '280px',
+      padding: 0,
+      customClass: {
+        popup: 'popup-border-radius',
+      },
+    });
+  }
+}
+
+function popupSuccess(title: string, message: string, timer?: number) {
+  if (timer) {
+    MySwal.fire({
+      html: <PopupSuccess title={title} description={message} close={Swal.close} />,
+      showConfirmButton: false,
+      width: '280px',
+      padding: 0,
+      customClass: {
+        popup: 'popup-border-radius',
+      },
+      timer: timer,
+    });
+  } else {
+    MySwal.fire({
+      html: <PopupSuccess title={title} description={message} close={Swal.close} />,
+      showConfirmButton: false,
+      width: '280px',
+      padding: 0,
+      customClass: {
+        popup: 'popup-border-radius',
+      },
+    });
+  }
+}
+
+function popupConfirm(title: string, message: string) {
+  return MySwal.fire({
+    html: (
+      <PopupConfirm
+        title={title}
+        description={message}
+        confirm={Swal.clickConfirm}
+        close={Swal.close}
+      />
+    ),
     showConfirmButton: false,
-    width: '480px',
+    width: '280px',
     padding: 0,
     customClass: {
       popup: 'popup-border-radius',
@@ -16,4 +76,16 @@ function popupFail(title: string, message: string) {
   });
 }
 
-export { popupFail };
+function popupMap(latitude: number, longitude: number) {
+  MySwal.fire({
+    html: <PopupMap location={{ la: latitude, lo: longitude }} />,
+    showConfirmButton: false,
+    width: '370px',
+    padding: 0,
+    customClass: {
+      popup: 'popup-border-radius',
+    },
+  });
+}
+
+export { popupFail, popupSuccess, popupConfirm, popupMap };
