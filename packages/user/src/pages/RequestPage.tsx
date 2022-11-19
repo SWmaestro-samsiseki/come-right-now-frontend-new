@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import thema from '../styles/thema';
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
+import useAuthStore from '../stores/authStore';
 import useRequestInfoStore from '../stores/requestInfoStore';
 import useSocket from '../hooks/useSocket';
 import RequestHeader from '../components/RequestHeader';
@@ -46,8 +47,8 @@ function RequestPage() {
   const navigate = useNavigate();
   const token = localStorage.getItem('token') as string;
   const { socket } = useSocket(token);
-  const { selectedCategories, people, time, latitude, longitude, initCategories } =
-    useRequestInfoStore();
+  const { latitude, longitude } = useAuthStore();
+  const { selectedCategories, people, time, initCategories } = useRequestInfoStore();
   const MySwal = withReactContent(Swal);
 
   function findStore() {

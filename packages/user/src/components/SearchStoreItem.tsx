@@ -12,6 +12,7 @@ import PopupSuccess from './PopupSuccess';
 import PopupFail from './PopupFail';
 import PopupMenu from './PopupMenu';
 import type { ReservationDTO } from '../interfaces/reservation';
+import useAuthStore from '../stores/authStore';
 
 const ItemContainer = styled.div`
   display: flex;
@@ -140,7 +141,8 @@ const DetailContainer = styled.div`
 `;
 
 function SearchStoreItem({ item, map }: { item: ReservationDTO; map: naver.maps.Map | null }) {
-  const { latitude, longitude, initPT } = useRequestInfoStore();
+  const { latitude, longitude } = useAuthStore();
+  const { initPT } = useRequestInfoStore();
   const [limitTime] = useState(new Date().getTime() + 180000);
   const [time, setTime] = useState('03:00');
   const [isLimit, setIsLimit] = useState(false);

@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import thema from '../styles/thema';
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
-import useRequestInfoStore from '../stores/requestInfoStore';
+import useAuthStore from '../stores/authStore';
 import useTimeDealStore from '../stores/timeDealStore';
 import { getCurrenTimeDealByUser, requestTimeDealByUser } from '../apis/timeDealAPI';
 import PopupConfirm from './PopupConfirm';
@@ -126,7 +126,7 @@ const BtnBox = styled.div`
 `;
 
 function ItemTimeDeal({ item }: { item: TimeDealUserDTO }) {
-  const { latitude, longitude } = useRequestInfoStore();
+  const { latitude, longitude } = useAuthStore();
   const { initCurrentTimeDeal } = useTimeDealStore();
 
   async function fetchCurrentTimeDeal(latitude: number, longitude: number) {

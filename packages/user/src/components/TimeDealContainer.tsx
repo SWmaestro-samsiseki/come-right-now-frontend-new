@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import thema from '../styles/thema';
-import useRequestInfoStore from '../stores/requestInfoStore';
+import useAuthStore from '../stores/authStore';
 import useTimeDealStore from '../stores/timeDealStore';
 import ItemTimeDeal from './ItemTimeDeal';
 import { getTimeDealList } from '../apis/timeDealAPI';
@@ -81,7 +81,7 @@ const MoreBox = styled.div`
 
 function TimeDealContainer() {
   const navigate = useNavigate();
-  const { latitude, longitude } = useRequestInfoStore();
+  const { latitude, longitude } = useAuthStore();
   const { timeDealList, initTimeDeal } = useTimeDealStore();
   const [list, setList] = useState<TimeDealUserDTO[]>([]);
 

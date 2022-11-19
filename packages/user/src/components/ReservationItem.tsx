@@ -4,7 +4,7 @@ import thema from '../styles/thema';
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
 import useSocket from '../hooks/useSocket';
-import useRequestInfoStore from '../stores/requestInfoStore';
+import useAuthStore from '../stores/authStore';
 import useReservationStore from '../stores/reservationStore';
 import PopupConfirm from './PopupConfirm';
 import PopupSuccess from './PopupSuccess';
@@ -170,7 +170,7 @@ const DetailBtn = styled.div`
 function ReservationItem({ reservation }: { reservation: ReservationDTO }) {
   const token = localStorage.getItem('token') as string;
   const { socket } = useSocket(token);
-  const { latitude, longitude } = useRequestInfoStore();
+  const { latitude, longitude } = useAuthStore();
   const { removeReservation, updateReservation } = useReservationStore();
   const [distance, setDistance] = useState('');
   const [isDetail, setIsDetail] = useState(false);

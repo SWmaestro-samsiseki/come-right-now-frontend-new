@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import styled from 'styled-components';
-import useRequestInfoStore from '../stores/requestInfoStore';
+import useAuthStore from '../stores/authStore';
 
 const Container = styled.div`
   width: 370px;
@@ -13,7 +13,7 @@ const Map = styled.div`
 `;
 
 function MapPopup({ location }: { location: { la: number; lo: number } }) {
-  const { latitude, longitude } = useRequestInfoStore();
+  const { latitude, longitude } = useAuthStore();
   // const { setMap } = useMap()
 
   useEffect(() => {

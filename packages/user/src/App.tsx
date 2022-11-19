@@ -2,7 +2,6 @@ import React, { useEffect } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import styled from 'styled-components';
 import useAuthStore from './stores/authStore';
-import useRequestInfoStore from './stores/requestInfoStore';
 import { getAuthValid } from './apis/authAPI';
 import { messageToNative } from './utils/react-native';
 import LoginPage from './pages/LoginPage';
@@ -19,8 +18,7 @@ const Container = styled.div`
 `;
 
 function App() {
-  const { authorized, setAuthorized } = useAuthStore();
-  const { setLatitude, setLongitude } = useRequestInfoStore();
+  const { authorized, setAuthorized, setLatitude, setLongitude } = useAuthStore();
 
   async function authValid(): Promise<void> {
     const response = await getAuthValid();

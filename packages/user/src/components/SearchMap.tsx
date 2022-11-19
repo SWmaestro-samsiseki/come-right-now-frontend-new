@@ -4,9 +4,10 @@ import styled from 'styled-components';
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
 import useSocket from '../hooks/useSocket';
+import useAuthStore from '../stores/authStore';
+import useRequestInfoStore from '../stores/requestInfoStore';
 import useResponseInfoStore from '../stores/responseInfoStore';
 import { getReservationInfo } from '../apis/reservationAPI';
-import useRequestInfoStore from '../stores/requestInfoStore';
 import thema from '../styles/thema';
 import PopupConfirm from '../components/PopupConfirm';
 import PopupFail from './PopupFail';
@@ -69,7 +70,8 @@ function SearchMap({
 }) {
   const { socket } = useSocket(localStorage.getItem('token') as string);
   const { addResponse } = useResponseInfoStore();
-  const { selectedCategories, people, time, latitude, longitude } = useRequestInfoStore();
+  const { latitude, longitude } = useAuthStore();
+  const { selectedCategories, people, time } = useRequestInfoStore();
   const [isSearch, setIsSearch] = useState(true);
   const navigate = useNavigate();
   const MySwal = withReactContent(Swal);

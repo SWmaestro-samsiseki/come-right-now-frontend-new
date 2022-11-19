@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import styled from 'styled-components';
 import thema from '../styles/thema';
-import useRequestInfoStore from '../stores/requestInfoStore';
+import useAuthStore from '../stores/authStore';
 import useTimeDealStore from '../stores/timeDealStore';
 import { getCurrenTimeDealByUser } from '../apis/timeDealAPI';
 import ItemCurrentTimeDeal from './ItemCurrentTimeDeal';
@@ -48,7 +48,7 @@ const EmptyBox = styled.div`
 `;
 
 function CurrentTimeDealContainer() {
-  const { latitude, longitude } = useRequestInfoStore();
+  const { latitude, longitude } = useAuthStore();
   const { currentTimeDealList, initCurrentTimeDeal } = useTimeDealStore();
 
   async function fetchCurrentTimeDeal(latitude: number, longitude: number) {

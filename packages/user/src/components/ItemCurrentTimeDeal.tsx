@@ -4,7 +4,7 @@ import thema from '../styles/thema';
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
 import useSocket from '../hooks/useSocket';
-import useRequestStore from '../stores/requestInfoStore';
+import useAuthStore from '../stores/authStore';
 import useTimeDealStore from '../stores/timeDealStore';
 import { deleteParticipantByStore } from '../apis/timeDealAPI';
 import PopupConfirm from './PopupConfirm';
@@ -88,7 +88,7 @@ const BtnBox = styled.div`
 
 function ItemCurrentTimeDeal({ item }: { item: CurrentTimeDealUserDTO }) {
   const { socket } = useSocket(localStorage.getItem('token') as string);
-  const { latitude, longitude } = useRequestStore();
+  const { latitude, longitude } = useAuthStore();
   const { removeCurrentTimeDeal } = useTimeDealStore();
   const MySwal = withReactContent(Swal);
 
