@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import useRequestInfoStore from '../stores/requestInfoStore';
+import useReservationStore from '../stores/reservationStore';
 import CategoryItem from './CategoryItem';
 
 const CategoryContainer = styled.div`
@@ -18,12 +18,12 @@ const CategoryContainer = styled.div`
 `;
 
 function RequestCategory() {
-  const { categories } = useRequestInfoStore();
+  const { category } = useReservationStore();
 
   return (
     <CategoryContainer>
       <div>
-        {categories.map((ele, index) => (
+        {category.map((ele, index) => (
           <CategoryItem key={index} category={ele} />
         ))}
       </div>

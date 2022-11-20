@@ -6,7 +6,7 @@ import { getAuthValid } from './apis/authAPI';
 import { messageToNative } from './utils/react-native';
 import LoginPage from './pages/LoginPage';
 import MainPage from './pages/MainPage';
-import RequestPage from './pages/RequestPage';
+import ReservationPage from './pages/ReservationPage';
 import SearchPage from './pages/SearchPage';
 
 const Container = styled.div`
@@ -79,7 +79,7 @@ function App() {
         />
         <Route
           path="/request"
-          element={authorized ? <RequestPage /> : <Navigate to="/login" replace={true} />}
+          element={authorized ? <ReservationPage /> : <Navigate to="/login" replace={true} />}
         />
         <Route
           path="/search"

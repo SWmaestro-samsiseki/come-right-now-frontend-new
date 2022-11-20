@@ -2,11 +2,9 @@ import create from 'zustand';
 import type { Category } from '../interfaces/common';
 
 interface RequestInfo {
-  categories: Category[];
   selectedCategories: Category[];
   people: number;
   time: number;
-  initCategories: (categories: Category[]) => void;
   addCategory: (category: Category) => void;
   removeCategory: (category: Category) => void;
   plusPeople: () => void;
@@ -17,11 +15,9 @@ interface RequestInfo {
 }
 
 const useRequestInfoStore = create<RequestInfo>((set) => ({
-  categories: [],
   selectedCategories: [],
   people: 1,
   time: 0,
-  initCategories: (categories: Category[]) => set(() => ({ categories: [...categories] })),
   addCategory: (category: Category) =>
     set((state) => ({ selectedCategories: [...state.selectedCategories, category] })),
   removeCategory: (category: Category) =>

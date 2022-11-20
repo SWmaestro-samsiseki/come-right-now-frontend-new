@@ -1,11 +1,14 @@
 import create from 'zustand';
 import type { ReservationDTO } from '../interfaces/reservation';
+import type { Category } from '../interfaces/common';
 
 interface Reservation {
   reservation: ReservationDTO | null;
   addReservation: (value: ReservationDTO) => void;
   removeReservation: () => void;
   updateReservation: (item: ReservationDTO, time: Date) => void;
+  category: Category[];
+  initCategory: (value: Category[]) => void;
 }
 
 const useReservationStore = create<Reservation>((set) => ({
@@ -24,6 +27,11 @@ const useReservationStore = create<Reservation>((set) => ({
         user: item.user,
         store: item.store,
       },
+    })),
+  category: [],
+  initCategory: (value: Category[]) =>
+    set(() => ({
+      category: value,
     })),
 }));
 
