@@ -10,7 +10,7 @@ import RequestCategory from '../components/RequestCategory';
 import RequestStatus from '../components/RequestStatus';
 import { popupConfirm, popupFail } from '../utils/popup';
 
-const RequestContainer = styled.div`
+const Container = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -24,15 +24,12 @@ const SearchBtn = styled.button`
   height: 48px;
   margin: 20px;
   font: ${thema.font.pb2};
-  color: ${thema.color.primary.main3};
-  background: ${thema.color.secondary.main3};
+  color: ${(prop) => (prop.disabled ? thema.color.primary.main3 : thema.color.primary.main2)};
+  background: ${(prop) =>
+    prop.disabled ? thema.color.secondary.main3 : thema.color.primary.main1};
   border: none;
   border-radius: 4px;
 
-  &.active {
-    background: ${thema.color.primary.main1};
-    color: ${thema.color.primary.main2};
-  }
   &:active {
     background: ${thema.color.primary.main1_active};
   }
@@ -45,51 +42,38 @@ function RequestPage() {
   const { socket } = useSocket(localStorage.getItem('token') as string);
 
   function findStore() {
+    const condition = {
+      categories: selectedCategories.map((ele) => ele.id),
+      numberOfPeople: people,
+      delayMinutes: time,
+      longitude: longitude,
+      latitude: latitude,
+    };
     if (latitude && longitude) {
-      socket.emit(
-        'user.find-store.server',
-        {
-          categories: selectedCategories.map((ele) => ele.id),
-          numberOfPeople: people,
-          delayMinutes: time,
-          longitude: longitude,
-          latitude: latitude,
-        },
-        (response: boolean) => {
-          if (response) {
-            navigate('/search');
-          } else {
-            popupConfirm('탐색', '주번에 가게가 없습니다. 더 넓은 범위로 탐색하시겠습니까?').then(
-              ({ isConfirmed }) => {
-                if (isConfirmed) {
-                  socket.emit(
-                    'user.find-store-further.server',
-                    {
-                      categories: selectedCategories.map((ele) => ele.id),
-                      numberOfPeople: people,
-                      delayMinutes: time,
-                      longitude: longitude,
-                      latitude: latitude,
-                    },
-                    (response: boolean) => {
-                      if (response) {
-                        navigate('/search');
-                      } else {
-                        popupFail('탐색', '탐색에 실패했습니다. 다른 곳으로 이동하십시오.', 2000);
-                      }
-                    },
-                  );
-                }
-              },
-            );
-          }
-        },
-      );
+      socket.emit('user.find-store.server', condition, (response: boolean) => {
+        if (response) {
+          navigate('/search');
+        } else {
+          popupConfirm('탐색', '주번에 가게가 없습니다. 더 넓은 범위로 탐색하시겠습니까?').then(
+            ({ isConfirmed }) => {
+              if (isConfirmed) {
+                socket.emit('user.find-store-further.server', condition, (response: boolean) => {
+                  if (response) {
+                    navigate('/search');
+                  } else {
+                    popupFail('탐색', '탐색에 실패했습니다. 다른 곳으로 이동하십시오.', 2000);
+                  }
+                });
+              }
+            },
+          );
+        }
+      });
     }
   }
 
   return (
-    <RequestContainer>
+    <Container>
       <RequestHeader />
       <RequestStep step={1} name={'주종'} />
       <RequestCategory />
@@ -97,13 +81,10 @@ function RequestPage() {
       <RequestStatus type={'people'} />
       <RequestStep step={3} name={'시간'} />
       <RequestStatus type={'time'} />
-      <SearchBtn
-        onClick={findStore}
-        className={selectedCategories.length > 0 ? 'active' : ''}
-        disabled={selectedCategories.length > 0 ? false : true}>
+      <SearchBtn onClick={findStore} disabled={selectedCategories.length > 0 ? false : true}>
         지금갈게
       </SearchBtn>
-    </RequestContainer>
+    </Container>
   );
 }
 

@@ -7,8 +7,8 @@ const ItemContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  width: 76px;
-  height: 76px;
+  min-width: 76px;
+  min-height: 76px;
   margin: 5px;
   border: 1px solid ${thema.color.secondary.main2};
   border-radius: 24px;

@@ -142,7 +142,6 @@ const DetailContainer = styled.div`
 
 function SearchStoreItem({ item, map }: { item: ReservationDTO; map: naver.maps.Map | null }) {
   const { latitude, longitude } = useAuthStore();
-  const { initPT } = useRequestInfoStore();
   const [limitTime] = useState(new Date().getTime() + 180000);
   const [time, setTime] = useState('03:00');
   const [isLimit, setIsLimit] = useState(false);
@@ -180,7 +179,6 @@ function SearchStoreItem({ item, map }: { item: ReservationDTO; map: naver.maps.
             if (response) {
               console.log('예약에 성공했습니다.');
               addReservation(item);
-              initPT();
               navigate('/main', { replace: true });
               MySwal.fire({
                 html: (

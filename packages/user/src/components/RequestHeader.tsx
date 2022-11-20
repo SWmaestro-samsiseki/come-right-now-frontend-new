@@ -1,7 +1,6 @@
-import React from 'react';
 import styled from 'styled-components';
+import thema from '../styles/thema';
 import { Link } from 'react-router-dom';
-import useRequestInfoStore from '../stores/requestInfoStore';
 
 const Header = styled.header`
   position: relative;
@@ -10,7 +9,7 @@ const Header = styled.header`
   align-items: center;
   width: 100%;
   height: 8%;
-  font: normal 700 14px / 20px 'IBM Plex Sans KR';
+  font: ${thema.font.pb2};
 `;
 const BackBtn = styled(Link)`
   position: absolute;
@@ -18,11 +17,9 @@ const BackBtn = styled(Link)`
 `;
 
 function UserRequestHeader() {
-  const { initPT } = useRequestInfoStore();
-
   return (
     <Header>
-      <BackBtn to="/main" replace={true} onClick={initPT}>
+      <BackBtn to="/main" replace={true}>
         <img src={require('../images/back.png')} alt="뒤로가기" />
       </BackBtn>
       <h1>주점 찾기</h1>

@@ -11,7 +11,6 @@ interface RequestInfo {
   minusPeople: () => void;
   plusTime: () => void;
   minusTime: () => void;
-  initPT: () => void;
 }
 
 const useRequestInfoStore = create<RequestInfo>((set) => ({
@@ -30,7 +29,6 @@ const useRequestInfoStore = create<RequestInfo>((set) => ({
     set((state) => ({ people: state.people > 1 ? state.people - 1 : state.people })),
   plusTime: () => set((state) => ({ time: state.time < 30 ? state.time + 5 : state.time })),
   minusTime: () => set((state) => ({ time: state.time > 0 ? state.time - 5 : state.time })),
-  initPT: () => set(() => ({ selectedCategories: [], people: 1, time: 0 })),
 }));
 
 export default useRequestInfoStore;
