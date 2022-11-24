@@ -1,20 +1,15 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import Swal from 'sweetalert2';
-import withReactContent from 'sweetalert2-react-content';
-import useSocket from '../hooks/useSocket';
-import useReservationStore from '../stores/reservationStore';
-import useRequestInfoStore from '../stores/requestInfoStore';
-import { getDistance } from '../apis/reservationAPI';
-import PopupConfirm from './PopupConfirm';
-import PopupSuccess from './PopupSuccess';
-import PopupFail from './PopupFail';
-import PopupMenu from './PopupMenu';
-import type { ReservationDTO } from '../interfaces/reservation';
+import thema from '../styles/thema';
 import useAuthStore from '../stores/authStore';
+import useReservationStore from '../stores/reservationStore';
+import useSocket from '../hooks/useSocket';
+import { getDistance } from '../apis/reservationAPI';
+import { popupConfirm, popupFail, popupSuccess } from '../utils/popup';
+import type { ReservationDTO } from '../interfaces/reservation';
 
-const ItemContainer = styled.div`
+const BasicInfo = styled.div`
   display: flex;
   width: 100%;
   height: 72px;
@@ -35,36 +30,36 @@ const BtnContainer = styled.div`
   & button {
     width: 58px;
     height: 24px;
-    border: 1px solid #282828;
+    border: 1px solid ${thema.color.primary.main2};
     border-radius: 4px;
-    font: normal 700 12px / 16px 'IBM Plex Sans KR';
-    color: #282828;
+    font: ${thema.font.pb3};
+    color: ${thema.color.primary.main2};
     background: none;
   }
   & button.done {
-    color: #bbb;
-    border: 1px solid #bbb;
+    color: ${thema.color.secondary.main3_active};
+    border: 1px solid ${thema.color.secondary.main3_active};
   }
   & span {
     margin-top: 4px;
-    font: normal 500 12px / 16px 'IBM Plex Sans KR';
-    color: #282828;
+    font: ${thema.font.pb3};
+    color: ${thema.color.primary.main2};
   }
   & span.limit {
-    color: #f55;
+    color: ${thema.color.alert.red};
   }
 `;
-const ImageBox = styled.div`
+const ImageBox = styled.div<{ src: string | null }>`
   display: flex;
   flex-direction: column;
   justify-content: center;
   width: 56px;
   height: 56px;
-  background: #f5f5f5;
-
-  & img {
-    width: 100%;
-  }
+  background: ${(prop) =>
+    prop.src
+      ? `#F5F5F5 url('${prop.src}') no-repeat left top / cover`
+      : thema.color.secondary.main2};
+  border-radius: 8px;
 `;
 const InfoBox = styled.div`
   max-width: 70%;
@@ -77,13 +72,13 @@ const InfoMain = styled.div`
   height: 50%;
 
   & span:nth-child(1) {
-    font: normal 700 14px / 20px 'IBM Plex Sans KR';
-    color: #282828;
+    font: ${thema.font.p2};
+    color: ${thema.color.primary.main2};
   }
   & span:nth-child(2) {
     margin-left: 5px;
-    font: normal 500 12px / 16px 'IBM Plex Sans KR';
-    color: #888;
+    font: ${thema.font.p3};
+    color: ${thema.color.secondary.main4};
   }
 `;
 const InfoSub = styled.div`
@@ -94,126 +89,60 @@ const InfoSub = styled.div`
   & span:nth-child(1) {
     display: flex;
     align-items: center;
-    font: normal 500 14px / 20px 'IBM Plex Sans KR';
-    color: #282828;
+    font: ${thema.font.p2};
+    color: ${thema.color.primary.main2};
   }
   & span:nth-child(2) {
     margin-left: 10px;
-    font: normal 500 14px / 20px 'IBM Plex Sans KR';
-    color: #1593fd;
+    font: ${thema.font.p2};
+    color: ${thema.color.alert.blue};
   }
   & span:nth-child(3) {
     margin-left: 5px;
   }
 `;
-const DetailContainer = styled.div`
-  position: relative;
-  display: none;
+const DetailInfo = styled.div<{ show: boolean }>`
+  display: ${(prop) => (prop.show ? 'inline-block' : 'none')};
   width: 100%;
-  height: 120px;
+  height: fit-content;
   padding: 14px 20px;
-  font: normal 500 14px / 20px 'IBM Plex Sans KR';
-  color: #282828;
-  background: #f5f5f5;
+  font: ${thema.font.p2};
+  background: ${thema.color.secondary.main2};
 
-  & > span {
-    position: absolute;
-    bottom: 20px;
-    right: 20px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 59px;
-    height: 24px;
-    background: #bbbbbb;
-    border-radius: 16px;
-    font: normal 500 12px / 16px 'IBM Plex Sans KR';
-    color: white;
+  & p {
+    margin: 1px 0;
   }
-  & p span {
-    font: normal 700 14px / 20px 'IBM Plex Sans KR';
-  }
-  &.detail {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
+
+  & span {
+    font: ${thema.font.pb2};
   }
 `;
 
 function SearchStoreItem({ item, map }: { item: ReservationDTO; map: naver.maps.Map | null }) {
-  const { latitude, longitude } = useAuthStore();
-  const [limitTime] = useState(new Date().getTime() + 180000);
-  const [time, setTime] = useState('03:00');
   const [isLimit, setIsLimit] = useState(false);
   const [isDone, setIsDone] = useState(false);
   const [isDetail, setIsDetail] = useState(false);
   const [distance, setDistance] = useState('');
-  const token = localStorage.getItem('token') as string;
-  const { socket } = useSocket(token);
-  const { addReservation } = useReservationStore();
+  const [limitTime] = useState(new Date().getTime() + 180000);
+  const [time, setTime] = useState('03:00');
   const navigate = useNavigate();
-  const MySwal = withReactContent(Swal);
+  const { latitude, longitude } = useAuthStore();
+  const { addReservation } = useReservationStore();
+  const { socket } = useSocket(localStorage.getItem('token') as string);
 
   function reservation(name: string) {
-    MySwal.fire({
-      html: (
-        <PopupConfirm
-          title="예약"
-          description={`${name}에 예약하시겠습니까?`}
-          confirm={Swal.clickConfirm}
-          close={Swal.close}
-        />
-      ),
-      showConfirmButton: false,
-      width: '280px',
-      padding: 0,
-      customClass: {
-        popup: 'fail-popup-border',
-      },
-    }).then((result) => {
+    popupConfirm('예약', `${name}에 예약하시겠습니까?`).then((result) => {
       if (result.isConfirmed) {
         socket.emit(
           'user.make-reservation.server',
           { storeId: item.store.id, reservationId: item.id },
           (response: boolean) => {
             if (response) {
-              console.log('예약에 성공했습니다.');
               addReservation(item);
               navigate('/main', { replace: true });
-              MySwal.fire({
-                html: (
-                  <PopupSuccess
-                    title="예약"
-                    description="예약에 성공했습니다."
-                    close={Swal.clickCancel}
-                  />
-                ),
-                showConfirmButton: false,
-                width: '280px',
-                padding: 0,
-                customClass: {
-                  popup: 'fail-popup-border',
-                },
-                timer: 2000,
-              });
+              popupSuccess('예약', '예약에 성공했습니다!', 2000);
             } else {
-              console.log('예약을 하지 못했습니다.');
-              MySwal.fire({
-                html: (
-                  <PopupFail
-                    title="예약"
-                    description="예약에 실패했습니다."
-                    close={Swal.clickCancel}
-                  />
-                ),
-                showConfirmButton: false,
-                width: '280px',
-                padding: 0,
-                customClass: {
-                  popup: 'fail-popup-border',
-                },
-                timer: 2000,
-              });
+              popupFail('예약', '예약에 실패했습니다!', 2000);
             }
           },
         );
@@ -225,20 +154,10 @@ function SearchStoreItem({ item, map }: { item: ReservationDTO; map: naver.maps.
     setIsDetail(!isDetail);
   }
 
-  function showMenu() {
-    MySwal.fire({
-      html: <PopupMenu src={item.store.menuImage as string} />,
-      showConfirmButton: false,
-      width: '380px',
-      padding: 0,
-      customClass: {
-        popup: 'fail-popup-border',
-      },
-    });
-  }
-
   const fetchDistance = async (id: string, latitude: number, longitude: number) => {
     const response = await getDistance(id, latitude, longitude);
+    console.log(response);
+
     if (!('error' in response)) {
       setDistance(String(response.distanceMeter));
     }
@@ -269,25 +188,11 @@ function SearchStoreItem({ item, map }: { item: ReservationDTO; map: naver.maps.
     }
   }, []);
 
-  useEffect(() => {
-    if (map) {
-      new naver.maps.Marker({
-        position: new naver.maps.LatLng(item.store.latitude, item.store.longitude),
-        map: map,
-        icon: {
-          url: require('../images/location_cur.png'),
-        },
-      });
-    }
-  }, []);
-
   return (
     <div>
-      <ItemContainer>
+      <BasicInfo>
         <InfoContainer>
-          <ImageBox>
-            <img src={item.store.storeImage ? item.store.storeImage : ''} alt="가게 이미지" />
-          </ImageBox>
+          <ImageBox src={item.store.storeImage} />
           <InfoBox>
             <InfoMain>
               <span>{item.store.businessName}</span>
@@ -319,8 +224,8 @@ function SearchStoreItem({ item, map }: { item: ReservationDTO; map: naver.maps.
           </button>
           <span className={isLimit ? 'limit' : ''}>{time}</span>
         </BtnContainer>
-      </ItemContainer>
-      <DetailContainer className={isDetail ? 'detail' : ''}>
+      </BasicInfo>
+      <DetailInfo show={isDetail}>
         <p>
           <span>주소:</span> {item.store.address}
         </p>
@@ -338,8 +243,7 @@ function SearchStoreItem({ item, map }: { item: ReservationDTO; map: naver.maps.
             .filter((ele) => ele !== null)
             .join(', ')}
         </p>
-        {item.store.menuImage ? <span onClick={showMenu}>메뉴보기</span> : null}
-      </DetailContainer>
+      </DetailInfo>
     </div>
   );
 }

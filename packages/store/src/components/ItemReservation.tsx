@@ -56,7 +56,7 @@ const BtnBox = styled.div`
     height: 84px;
     border: none;
     border-radius: 4px;
-    font: ${thema.font.pb1};
+    font: ${thema.font.pb2};
   }
   & button:nth-child(1) {
     border: 1px solid ${thema.color.primary.main2};
